@@ -1,4 +1,4 @@
 - Nombre del proyecto: Atah's Around USA
 - Descripción del proyecto: Atah's Around USA es una página interactiva que muestra partes de USA esta creada con HTML, CSS y javascript, y actualizada con control de versiones git y posteada a github.
 - Planes de mejora del proyecto: Se ira actualizando con forme sea necesario.
-- el proyecto es visible en
+- el proyecto es visible en https://diechilui86.github.io/web_project_around_es/
