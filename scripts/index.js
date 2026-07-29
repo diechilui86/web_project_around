@@ -29,18 +29,18 @@ initialCards.forEach(function (card) {
   console.log(card.name);
 });
 
-const profileModal = document.querySelector(".profile");
-const profileEditBtn = profileModal.querySelector(".profile__edit-button");
+const profileSection = document.querySelector(".profile");
+const profileEditBtn = profileSection.querySelector(".profile__edit-button");
 const editProfileModal = document.querySelector("#edit-popup");
 const profileEditCloseBtn = editProfileModal.querySelector(".popup__close");
-let profileInputName = editProfileModal.querySelector(
+const profileInputName = editProfileModal.querySelector(
   ".popup__input_type_name",
 );
-let profileInputDescription = editProfileModal.querySelector(
+const profileInputDescription = editProfileModal.querySelector(
   ".popup__input_type_description",
 );
-let profileName = profileModal.querySelector(".profile__title");
-let profileDescription = profileModal.querySelector(".profile__description");
+let profileName = profileSection.querySelector(".profile__title");
+let profileDescription = profileSection.querySelector(".profile__description");
 
 let formElement = editProfileModal.querySelector("#edit-profile-form");
 
@@ -72,12 +72,8 @@ function handleOpenEditModal(modal) {
 
 function handleProfileFormSubmit(evt) {
   evt.preventDefault();
-
-  let nameInput = profileInputName.value;
-  let jobInput = profileInputDescription.value;
-
-  profileName.textContent = nameInput;
-  profileDescription.textContent = jobInput;
+  profileName.textContent = profileInputName.value;
+  profileDescription.textContent = profileInputDescription.value;
   closeModal(editProfileModal);
 }
 
