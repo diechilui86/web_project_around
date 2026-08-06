@@ -48,8 +48,8 @@ const newCardInputName = newCardModal.querySelector(
 const newCardInputLink = newCardModal.querySelector(".popup__input_type_url");
 
 const imageModal = document.querySelector("#image-popup");
-const imageModalImage = imageModal.querySelector(".popup__image");
-const imageModalCaption = imageModal.querySelector(".popup__caption");
+let imageModalImage = imageModal.querySelector(".popup__image");
+let imageModalCaption = imageModal.querySelector(".popup__caption");
 const imageModalCloseBtn = imageModal.querySelector(".popup__close");
 
 function openModal(modal) {
