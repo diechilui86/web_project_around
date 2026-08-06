@@ -47,6 +47,11 @@ const newCardInputName = newCardModal.querySelector(
 );
 const newCardInputLink = newCardModal.querySelector(".popup__input_type_url");
 
+const imageModal = document.querySelector("#image-popup");
+const imageModalImage = imageModal.querySelector(".popup__image");
+const imageModalCaption = imageModal.querySelector(".popup__caption");
+const imageModalCloseBtn = imageModal.querySelector(".popup__close");
+
 function openModal(modal) {
   modal.classList.add("popup_is-opened");
 }
@@ -95,6 +100,13 @@ function getCardElement(
   const deleteBtn = cardElement.querySelector(".card__delete-button");
   deleteBtn.addEventListener("click", () => cardElement.remove());
 
+  cardImage.addEventListener("click", () => {
+    imageModalImage.src = link;
+    imageModalImage.alt = name;
+    imageModalCaption.textContent = name;
+    openModal(imageModal);
+  });
+
   return cardElement;
 }
 
@@ -128,3 +140,5 @@ newCardBtn.addEventListener("click", () => openModal(newCardModal));
 newCardCloseBtn.addEventListener("click", () => closeModal(newCardModal));
 
 newCardForm.addEventListener("submit", handleCardFormSubmit);
+
+imageModalCloseBtn.addEventListener("click", () => closeModal(imageModal));
