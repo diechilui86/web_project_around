@@ -25,10 +25,6 @@ let initialCards = [
   },
 ];
 
-initialCards.forEach(function (card) {
-  console.log(card.name);
-});
-
 const profileSection = document.querySelector(".profile");
 const profileEditBtn = profileSection.querySelector(".profile__edit-button");
 const editProfileModal = document.querySelector("#edit-popup");
@@ -43,6 +39,13 @@ let profileName = profileSection.querySelector(".profile__title");
 let profileDescription = profileSection.querySelector(".profile__description");
 
 let formElement = editProfileModal.querySelector("#edit-profile-form");
+
+const cardContainer = document.querySelector(".cards__list");
+
+initialCards.forEach(function (card) {
+  console.log(card.name);
+  renderCard(card.name, card.link, cardContainer);
+});
 
 profileEditBtn.addEventListener("click", () =>
   handleOpenEditModal(editProfileModal),
@@ -78,3 +81,25 @@ function handleProfileFormSubmit(evt) {
 }
 
 formElement.addEventListener("submit", handleProfileFormSubmit);
+
+function getCardElement(
+  name = "Sin Titulo",
+  link = "../images/placeholder.jpg",
+) {
+  const cardElement = document
+    .querySelector("#card-template")
+    .content.cloneNode(true);
+  const cardTitle = cardElement.querySelector(".card__title");
+  const cardImage = cardElement.querySelector(".card__image");
+
+  cardTitle.textContent = name;
+  cardImage.src = link;
+  cardImage.alt = name;
+
+  return cardElement;
+}
+
+function renderCard(name, link, container) {
+  const card = getCardElement(name, link);
+  container.prepend(card);
+}
