@@ -58,6 +58,7 @@ function openModal(modal) {
 
 function closeModal(modal) {
   modal.classList.remove("popup_is-opened");
+  resetValidation(modal.querySelector("form"));
 }
 
 function fillProfileForm() {
@@ -142,3 +143,24 @@ newCardCloseBtn.addEventListener("click", () => closeModal(newCardModal));
 newCardForm.addEventListener("submit", handleCardFormSubmit);
 
 imageModalCloseBtn.addEventListener("click", () => closeModal(imageModal));
+
+import { setEventListeners, resetValidation } from "./validate.js";
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    const activeModal = document.querySelector(".popup_is-opened");
+    if (activeModal) {
+      closeModal(activeModal);
+    }
+  }
+});
+
+document.addEventListener("click", (event) => {
+  const activeModal = document.querySelector(".popup_is-opened");
+  if (event.target === activeModal) {
+    closeModal(activeModal);
+  }
+});
+
+setEventListeners(formElement);
+setEventListeners(newCardForm);

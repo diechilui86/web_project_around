@@ -1,0 +1,24 @@
+/* ====== ERRORES ====== */
+
+.popup__input-error {
+  display: none;
+  font-size: 12px;
+  color: red;
+}
+
+.popup__input_type_error {
+  border-bottom: 1px solid red;
+}
+.popup__input-error_active {
+  display: block;
+}
+
+/* ====== BOTON DESABILITADO ====== */
+
+.popup__button:disabled {
+  background: transparent;
+  cursor: not-allowed;
+  color: rgba(0, 0, 0, 1);
+  border: 1px solid rgba(0, 0, 0, 1);
+  opacity: 0.2;
+}
