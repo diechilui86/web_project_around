@@ -54,11 +54,19 @@ const imageModalCloseBtn = imageModal.querySelector(".popup__close");
 
 function openModal(modal) {
   modal.classList.add("popup_is-opened");
+  document.addEventListener("keydown", closeWithEsc);
+  modal.addEventListener("click", closeWithClickOutside);
 }
 
 function closeModal(modal) {
   modal.classList.remove("popup_is-opened");
-  resetValidation(modal.querySelector("form"));
+  document.removeEventListener("keydown", closeWithEsc);
+  modal.removeEventListener("click", closeWithClickOutside);
+  const form = modal.querySelector("form");
+
+  if (form) {
+    resetValidation(form);
+  }
 }
 
 function fillProfileForm() {
@@ -120,7 +128,21 @@ function handleCardFormSubmit(evt) {
   evt.preventDefault();
   renderCard(newCardInputName.value, newCardInputLink.value, cardContainer);
   closeModal(newCardModal);
-  newCardForm.reset();
+}
+
+function closeWithEsc(evt) {
+  if (evt.key === "Escape") {
+    const activeModal = document.querySelector(".popup_is-opened");
+    if (activeModal) {
+      closeModal(activeModal);
+    }
+  }
+}
+
+function closeWithClickOutside(evt) {
+  if (evt.target === evt.currentTarget) {
+    closeModal(evt.currentTarget);
+  }
 }
 
 initialCards.forEach(function (card) {
@@ -130,37 +152,19 @@ initialCards.forEach(function (card) {
 profileEditBtn.addEventListener("click", () =>
   handleOpenEditModal(editProfileModal),
 );
-
 profileEditCloseBtn.addEventListener("click", () =>
   closeModal(editProfileModal),
 );
 
-formElement.addEventListener("submit", handleProfileFormSubmit);
-
 newCardBtn.addEventListener("click", () => openModal(newCardModal));
 newCardCloseBtn.addEventListener("click", () => closeModal(newCardModal));
 
+formElement.addEventListener("submit", handleProfileFormSubmit);
 newCardForm.addEventListener("submit", handleCardFormSubmit);
 
 imageModalCloseBtn.addEventListener("click", () => closeModal(imageModal));
 
 import { setEventListeners, resetValidation } from "./validate.js";
-
-document.addEventListener("keydown", (event) => {
-  if (event.key === "Escape") {
-    const activeModal = document.querySelector(".popup_is-opened");
-    if (activeModal) {
-      closeModal(activeModal);
-    }
-  }
-});
-
-document.addEventListener("click", (event) => {
-  const activeModal = document.querySelector(".popup_is-opened");
-  if (event.target === activeModal) {
-    closeModal(activeModal);
-  }
-});
 
 setEventListeners(formElement);
 setEventListeners(newCardForm);

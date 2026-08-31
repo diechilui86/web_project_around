@@ -19,7 +19,7 @@ function toggleButtonState(inputs, submitButton) {
 
 function setEventListeners(form) {
   const inputs = form.querySelectorAll(".popup__input");
-  const submitBtn = form.querySelector(".popup__button");
+  const submitButton = form.querySelector(".popup__button");
   inputs.forEach((input) => {
     input.addEventListener("input", () => {
       if (!input.validity.valid) {
@@ -27,33 +27,20 @@ function setEventListeners(form) {
       } else {
         hideInputError(form, input);
       }
-      toggleButtonState(inputs, submitBtn);
+      toggleButtonState(inputs, submitButton);
     });
-  });
-
-  form.addEventListener("submit", (event) => {
-    let formValid = true;
-
-    inputs.forEach((input) => {
-      if (!input.validity.valid) {
-        showInputError(form, input, input.validationMessage);
-        formValid = false;
-      }
-    });
-
-    if (!formValid) {
-      event.preventDefault();
-    }
   });
 }
 
 function resetValidation(form) {
   const inputs = form.querySelectorAll(".popup__input");
+  const submitButton = form.querySelector(".popup__button");
 
   inputs.forEach((input) => {
     hideInputError(form, input);
   });
   form.reset();
+  submitButton.disabled = true;
 }
 
 export { setEventListeners, resetValidation };
