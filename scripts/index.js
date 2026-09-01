@@ -1,4 +1,6 @@
-let initialCards = [
+import { setEventListeners, resetValidation } from "./validate.js";
+
+const initialCards = [
   {
     name: "Valle de Yosemite",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",
@@ -34,22 +36,24 @@ const profileInputName = editProfileModal.querySelector(
 const profileInputDescription = editProfileModal.querySelector(
   ".popup__input_type_description",
 );
-let profileName = profileSection.querySelector(".profile__title");
-let profileDescription = profileSection.querySelector(".profile__description");
-let formElement = editProfileModal.querySelector("#edit-profile-form");
+const profileName = profileSection.querySelector(".profile__title");
+const profileDescription = profileSection.querySelector(
+  ".profile__description",
+);
+const formElement = editProfileModal.querySelector("#edit-profile-form");
 const cardContainer = document.querySelector(".cards__list");
 const newCardBtn = profileSection.querySelector(".profile__add-button");
 const newCardModal = document.querySelector("#new-card-popup");
 const newCardCloseBtn = newCardModal.querySelector(".popup__close");
-let newCardForm = newCardModal.querySelector("#new-card-form");
+const newCardForm = newCardModal.querySelector("#new-card-form");
 const newCardInputName = newCardModal.querySelector(
   ".popup__input_type_card-name",
 );
 const newCardInputLink = newCardModal.querySelector(".popup__input_type_url");
 
 const imageModal = document.querySelector("#image-popup");
-let imageModalImage = imageModal.querySelector(".popup__image");
-let imageModalCaption = imageModal.querySelector(".popup__caption");
+const imageModalImage = imageModal.querySelector(".popup__image");
+const imageModalCaption = imageModal.querySelector(".popup__caption");
 const imageModalCloseBtn = imageModal.querySelector(".popup__close");
 
 function openModal(modal) {
@@ -86,10 +90,7 @@ function handleProfileFormSubmit(evt) {
   closeModal(editProfileModal);
 }
 
-function getCardElement(
-  name = "Sin Titulo",
-  link = "../images/placeholder.jpg",
-) {
+function getCardElement(name, link) {
   const cardElement = document
     .querySelector("#card-template")
     .content.querySelector(".card")
@@ -163,8 +164,6 @@ formElement.addEventListener("submit", handleProfileFormSubmit);
 newCardForm.addEventListener("submit", handleCardFormSubmit);
 
 imageModalCloseBtn.addEventListener("click", () => closeModal(imageModal));
-
-import { setEventListeners, resetValidation } from "./validate.js";
 
 setEventListeners(formElement);
 setEventListeners(newCardForm);
