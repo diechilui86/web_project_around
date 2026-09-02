@@ -1,4 +1,4 @@
-import { setEventListeners, resetValidation } from "./validate.js";
+import { enableValidation, resetValidation } from "./validate.js";
 
 const initialCards = [
   {
@@ -56,6 +56,14 @@ const imageModalImage = imageModal.querySelector(".popup__image");
 const imageModalCaption = imageModal.querySelector(".popup__caption");
 const imageModalCloseBtn = imageModal.querySelector(".popup__close");
 
+const validationConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__input-error_active",
+};
+
 function openModal(modal) {
   modal.classList.add("popup_is-opened");
   document.addEventListener("keydown", closeWithEsc);
@@ -69,7 +77,7 @@ function closeModal(modal) {
   const form = modal.querySelector("form");
 
   if (form) {
-    resetValidation(form);
+    resetValidation(validationConfig, form);
   }
 }
 
@@ -165,5 +173,4 @@ newCardForm.addEventListener("submit", handleCardFormSubmit);
 
 imageModalCloseBtn.addEventListener("click", () => closeModal(imageModal));
 
-setEventListeners(formElement);
-setEventListeners(newCardForm);
+enableValidation(validationConfig);
