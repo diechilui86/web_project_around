@@ -1,7 +1,7 @@
 
 export abstract class Popup {
   protected selector: string;
-  private popupElement: HTMLElement;
+  protected popupElement: HTMLElement;
 
   constructor(selector: string) {
     this.selector = selector;
@@ -10,17 +10,15 @@ export abstract class Popup {
   
   open(): void { 
     this.popupElement.classList.add("popup_is-opened");
-    this.setEventListeners();
   }
   close(): void {
     this.popupElement.classList.remove("popup_is-opened");
-    this.removeEventListeners();
   }
 
   private handleEscClose = (event: KeyboardEvent): void => {
     if (event.key === "Escape") {
       this.close();
-      console.log("Popup closed with Escape key");
+      this.removeEventListeners();
     }
   }
 
@@ -41,31 +39,3 @@ export abstract class Popup {
     document.removeEventListener("keydown", this.handleEscClose);
   }
 }
-
-
-/*
-
-function openModal(modal) {
-  modal.classList.add("popup_is-opened");
-  document.addEventListener("keydown", closeWithEsc);
-  modal.addEventListener("click", closeWithClickOutside);
-}
-
-function closeModal(modal) {
-  modal.classList.remove("popup_is-opened");
-  document.removeEventListener("keydown", closeWithEsc);
-  modal.removeEventListener("click", closeWithClickOutside);
-  const form = modal.querySelector("form");
-
-  if (form) {
-    resetValidation(validationConfig, form);
-  }
-}
-
-function closeWithClickOutside(evt) {
-  if (evt.target === evt.currentTarget) {
-    closeModal(evt.currentTarget);
-  }
-}
-
-*/

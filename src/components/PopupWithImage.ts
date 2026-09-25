@@ -14,8 +14,8 @@ export class PopupWithImage extends Popup {
 
   open(): void {
     super.open();
-    const popupImage = document.querySelector(".popup__image") as HTMLImageElement;
-    const popupCaption = document.querySelector(".popup__caption") as HTMLElement;
+    const popupImage = this.popupElement.querySelector(".popup__image") as HTMLImageElement;
+    const popupCaption = this.popupElement.querySelector(".popup__caption") as HTMLElement;
     
     popupCaption.textContent = this.name;
     popupImage.src = this.link;
@@ -23,21 +23,3 @@ export class PopupWithImage extends Popup {
   }
 }
 
-
-
-/*
-const imageModal = document.querySelector("#image-popup");
-const imageModalImage = imageModal.querySelector(".popup__image");
-const imageModalCaption = imageModal.querySelector(".popup__caption");
-const imageModalCloseBtn = imageModal.querySelector(".popup__close");
-
-cardImage.addEventListener("click", () => {
-            imageModalImage.src = link;
-            imageModalImage.alt = name;
-            imageModalCaption.textContent = name;
-            openModal(imageModal);
-        });
-
-
-
-*/
