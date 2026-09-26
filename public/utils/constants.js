@@ -1,3 +1,10 @@
+export const defaultFormConfig = {
+    formSelector: ".popup__form",
+    inputSelector: ".popup__input",
+    submitButtonSelector: ".popup__button",
+    inputErrorClass: "popup__input_type_error",
+    errorClass: "popup__input-error_active",
+};
 export const initialCards = [
     {
         name: "Valle de Yosemite",
@@ -24,6 +31,10 @@ export const initialCards = [
         link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lago.jpg",
     },
 ];
+export const profileInputName = document.querySelector(".popup__input_type_name");
+export const profileInputDescription = document.querySelector(".popup__input_type_description");
+export const newCardBtn = document.querySelector(".profile__add-button");
+export const profileEditBtn = document.querySelector(".profile__edit-button");
 /*
 
 const profileSection = document.querySelector(".profile");

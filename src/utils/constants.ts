@@ -1,6 +1,15 @@
 import type { CardData } from "../types/types.js";
 
 
+export const defaultFormConfig = {
+  formSelector: ".popup__form",
+  inputSelector: ".popup__input",
+  submitButtonSelector: ".popup__button",
+  inputErrorClass: "popup__input_type_error",
+  errorClass: "popup__input-error_active",
+}
+
+
 export const initialCards: CardData[] = [
   {
     name: "Valle de Yosemite",
@@ -28,6 +37,10 @@ export const initialCards: CardData[] = [
   },
 ];
 
+export const profileInputName = document.querySelector(".popup__input_type_name") as HTMLInputElement;
+export const profileInputDescription = document.querySelector(".popup__input_type_description") as HTMLInputElement;
+export const newCardBtn = document.querySelector(".profile__add-button") as HTMLButtonElement;
+export const profileEditBtn = document.querySelector(".profile__edit-button") as HTMLButtonElement;
 
 
 /*

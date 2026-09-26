@@ -14,7 +14,7 @@ export class Card {
         this.handleCardClick = handleCardClick;
     }
 
-    getTemplate(): HTMLElement {
+    private getTemplate(): HTMLElement {
         const cardTemplate = document.querySelector(this.selector) as HTMLTemplateElement;
         const cardElement = cardTemplate.content.querySelector(".card")!.cloneNode(true) as HTMLElement;
 
@@ -35,7 +35,7 @@ export class Card {
         return this.element;
     }
 
-    setEventListeners(): void {
+    private setEventListeners(): void {
         const likeBtn = this.element.querySelector(".card__like-button") as HTMLButtonElement;
         likeBtn.addEventListener("click", () => likeBtn.classList.toggle("card__like-button_is-active"),);
 

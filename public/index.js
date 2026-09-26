@@ -1,8 +1,9 @@
 import { Card } from "./components/Card.js";
-import { initialCards } from "./utils/constants.js";
+import { initialCards, profileInputDescription, profileInputName, newCardBtn, profileEditBtn } from "./utils/constants.js";
 import { Section } from "./components/Section.js";
 import { PopupWithImage } from "./components/PopupWithImage.js";
 import { PopupWithForm } from "./components/PopupWithForm.js";
+import { UserInfo } from "./components/UserInfo.js";
 const cardList = new Section({
     items: initialCards,
     renderer: (item) => {
@@ -25,5 +26,14 @@ const newCardForm = new PopupWithForm({ selector: "#new-card-popup", handleFormS
         const cardElement = newCard.generateCard();
         cardList.addItem(cardElement);
     } });
-const newCardBtn = document.querySelector(".profile__add-button");
+const user = new UserInfo({ nameSelector: ".profile__title", jobSelector: ".profile__description" });
+const profileForm = new PopupWithForm({ selector: "#edit-popup", handleFormSubmit: (formValues) => {
+        user.setUserInfo({ name: formValues.name, job: formValues.description });
+    } });
 newCardBtn.addEventListener("click", () => { newCardForm.open(); });
+profileEditBtn.addEventListener("click", () => {
+    const userData = user.getUserInfo();
+    profileInputName.value = userData.name;
+    profileInputDescription.value = userData.job;
+    profileForm.open();
+});
