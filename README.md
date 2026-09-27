@@ -230,4 +230,4 @@ Para la organización de los estilos CSS se utiliza la metodología **BEM (Block
 
 ## Autor
 
-**Diego Chiluisa**
+**Diego Chiluisa S.**
