@@ -2,7 +2,7 @@ import type { ConfigObject } from "../types/types";
 
 export class FormValidator {
     private formElement!: HTMLFormElement;
-    private inputList!: NodeListOf<HTMLInputElement>;
+    private inputsList!: NodeListOf<HTMLInputElement>;
     private submitButton!: HTMLButtonElement;
     private inactiveButtonClass: string;
     private inputErrorClass: string;
@@ -11,7 +11,7 @@ export class FormValidator {
     
     constructor({inputSelector, submitButtonSelector, inactiveButtonClass , inputErrorClass, errorClass}:ConfigObject, formElement: HTMLFormElement) {
         this.formElement = formElement;
-        this.inputList = this.formElement.querySelectorAll(inputSelector);
+        this.inputsList = this.formElement.querySelectorAll(inputSelector);
         this.submitButton = this.formElement.querySelector(submitButtonSelector) as HTMLButtonElement;
         this.inactiveButtonClass = inactiveButtonClass;
         this.inputErrorClass = inputErrorClass;
@@ -31,7 +31,7 @@ export class FormValidator {
     }   
 
     private toggleButtonState(): void {
-        const allValid = Array.from(this.inputList).every((input) => input.validity.valid);
+        const allValid = Array.from(this.inputsList).every((input) => input.validity.valid);
         this.submitButton.disabled = !allValid;
         if (!allValid){
             this.submitButton.classList.add(this.inactiveButtonClass);
@@ -56,7 +56,7 @@ export class FormValidator {
     }
 
     private setEventListeners(): void {
-        this.inputList.forEach((input) => {
+        this.inputsList.forEach((input) => {
             input.addEventListener("input", (event: InputEvent) => {
                 event.preventDefault();
                 this.validateInput(input);
@@ -70,7 +70,7 @@ export class FormValidator {
 
     resetValidation(): void {
         this.formElement.reset();
-        this.inputList.forEach((input) => { 
+        this.inputsList.forEach((input) => { 
             const errorElement = this.getErrorContainer(input);
             this.hideInputError(errorElement, input); 
         });

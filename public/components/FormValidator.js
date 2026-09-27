@@ -1,13 +1,13 @@
 export class FormValidator {
     formElement;
-    inputList;
+    inputsList;
     submitButton;
     inactiveButtonClass;
     inputErrorClass;
     errorClass;
     constructor({ inputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass, errorClass }, formElement) {
         this.formElement = formElement;
-        this.inputList = this.formElement.querySelectorAll(inputSelector);
+        this.inputsList = this.formElement.querySelectorAll(inputSelector);
         this.submitButton = this.formElement.querySelector(submitButtonSelector);
         this.inactiveButtonClass = inactiveButtonClass;
         this.inputErrorClass = inputErrorClass;
@@ -24,7 +24,7 @@ export class FormValidator {
         errorElement.textContent = "";
     }
     toggleButtonState() {
-        const allValid = Array.from(this.inputList).every((input) => input.validity.valid);
+        const allValid = Array.from(this.inputsList).every((input) => input.validity.valid);
         this.submitButton.disabled = !allValid;
         if (!allValid) {
             this.submitButton.classList.add(this.inactiveButtonClass);
@@ -48,7 +48,7 @@ export class FormValidator {
         this.toggleButtonState();
     }
     setEventListeners() {
-        this.inputList.forEach((input) => {
+        this.inputsList.forEach((input) => {
             input.addEventListener("input", (event) => {
                 event.preventDefault();
                 this.validateInput(input);
@@ -60,7 +60,7 @@ export class FormValidator {
     }
     resetValidation() {
         this.formElement.reset();
-        this.inputList.forEach((input) => {
+        this.inputsList.forEach((input) => {
             const errorElement = this.getErrorContainer(input);
             this.hideInputError(errorElement, input);
         });

@@ -8,7 +8,7 @@ interface FormValues{
 
 export class PopupWithForm extends Popup {
   private formElement!: HTMLFormElement;
-  private inputList!: NodeListOf<HTMLInputElement>;
+  private inputsList!: NodeListOf<HTMLInputElement>;
   private handleFormSubmit: FormSubmit;
 
   constructor({selector, handleFormSubmit}: {selector: string; handleFormSubmit: FormSubmit}) {
@@ -25,7 +25,7 @@ export class PopupWithForm extends Popup {
 
   private generateForm(): HTMLElement {
     this.formElement = this.getFormElement();
-    this.inputList = this.formElement.querySelectorAll(".popup__input");
+    this.inputsList = this.formElement.querySelectorAll(".popup__input");
 
     return this.formElement;
   }
@@ -49,7 +49,7 @@ export class PopupWithForm extends Popup {
   private getInputValues(): FormValues {
     const formValues: FormValues = {};
 
-    this.inputList.forEach((input) => {
+    this.inputsList.forEach((input) => {
       formValues[input.name] = input.value;
     });
 
