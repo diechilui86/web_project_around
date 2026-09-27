@@ -11,7 +11,6 @@ const cardList = new Section({
         const card = new Card(item, "#card-template", () => {
             const popupWithImage = new PopupWithImage({ name: item.name, link: item.link }, "#image-popup");
             popupWithImage.open();
-            popupWithImage.setEventListeners();
         });
         const cardElement = card.generateCard();
         cardList.addItem(cardElement);
