@@ -34,7 +34,6 @@ const newCardPopup = new PopupWithForm({selector: "#new-card-popup", handleFormS
     const newCard = new Card({name: formValues["place-name"], link: formValues.link},"#card-template", ()=>{
       const popupWithImage = new PopupWithImage({name: formValues["place-name"], link: formValues.link}, "#image-popup");
       popupWithImage.open();
-      popupWithImage.setEventListeners();
     });
     const cardElement = newCard.generateCard();   
     cardList.addItem(cardElement);
@@ -49,7 +48,6 @@ const profilePopup = new PopupWithForm({selector:"#edit-popup",handleFormSubmit:
 newCardBtn.addEventListener("click", () =>{ 
   cardFormValidator.resetValidation();
   newCardPopup.open(); 
-  newCardPopup.setEventListeners();
 });
 
 profileEditBtn.addEventListener("click", () =>{
@@ -58,7 +56,6 @@ profileEditBtn.addEventListener("click", () =>{
   profileInputName.value = userData.name;
   profileInputDescription.value = userData.job;
   profilePopup.open();
-  profilePopup.setEventListeners();
 });
 
 const editProfileForm = document.querySelector("#edit-profile-form") as HTMLFormElement;
