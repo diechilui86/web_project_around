@@ -41,7 +41,7 @@ export class FormValidator {
     }
 
     private getErrorContainer(inputElement: HTMLInputElement): HTMLElement{
-        const errorElement = document.querySelector(`.${inputElement.name}-input-error`) as HTMLElement;
+        const errorElement = this.formElement.querySelector(`.${inputElement.name}-input-error`) as HTMLElement;
         return errorElement;
     }
 
@@ -74,8 +74,7 @@ export class FormValidator {
             const errorElement = this.getErrorContainer(input);
             this.hideInputError(errorElement, input); 
         });
-        this.submitButton.disabled = true;
-        this.submitButton.classList.add(this.inactiveButtonClass);
+        this.toggleButtonState();
     }
 
 }

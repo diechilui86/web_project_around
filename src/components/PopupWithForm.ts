@@ -26,7 +26,6 @@ export class PopupWithForm extends Popup {
   private generateForm(): HTMLElement {
     this.formElement = this.getFormElement();
     this.inputList = this.formElement.querySelectorAll(".popup__input");
-    this.setEventListeners();
 
     return this.formElement;
   }

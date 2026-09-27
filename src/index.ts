@@ -49,6 +49,7 @@ const profilePopup = new PopupWithForm({selector:"#edit-popup",handleFormSubmit:
 newCardBtn.addEventListener("click", () =>{ 
   cardFormValidator.resetValidation();
   newCardPopup.open(); 
+  newCardPopup.setEventListeners();
 });
 
 profileEditBtn.addEventListener("click", () =>{
@@ -57,6 +58,7 @@ profileEditBtn.addEventListener("click", () =>{
   profileInputName.value = userData.name;
   profileInputDescription.value = userData.job;
   profilePopup.open();
+  profilePopup.setEventListeners();
 });
 
 const editProfileForm = document.querySelector("#edit-profile-form") as HTMLFormElement;
