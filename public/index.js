@@ -5,23 +5,25 @@ import { PopupWithImage } from "./components/PopupWithImage.js";
 import { PopupWithForm } from "./components/PopupWithForm.js";
 import { UserInfo } from "./components/UserInfo.js";
 import { FormValidator } from "./components/FormValidator.js";
+const openImagePopup = (cardData) => {
+    const popupWithImage = new PopupWithImage(cardData, "#image-popup");
+    popupWithImage.open();
+};
 const cardList = new Section({
     items: initialCards,
     renderer: (item) => {
-        const card = new Card(item, "#card-template", () => {
-            const popupWithImage = new PopupWithImage({ name: item.name, link: item.link }, "#image-popup");
-            popupWithImage.open();
-        });
+        const card = new Card(item, "#card-template", () => openImagePopup(item));
         const cardElement = card.generateCard();
         cardList.addItem(cardElement);
     }
 }, ".cards__list");
 cardList.renderItems();
 const newCardPopup = new PopupWithForm({ selector: "#new-card-popup", handleFormSubmit: (formValues) => {
-        const newCard = new Card({ name: formValues["place-name"], link: formValues.link }, "#card-template", () => {
-            const popupWithImage = new PopupWithImage({ name: formValues["place-name"], link: formValues.link }, "#image-popup");
-            popupWithImage.open();
-        });
+        const cardData = {
+            name: formValues["place-name"],
+            link: formValues.link
+        };
+        const newCard = new Card(cardData, "#card-template", () => openImagePopup(cardData));
         const cardElement = newCard.generateCard();
         cardList.addItem(cardElement);
     } });

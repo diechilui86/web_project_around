@@ -12,14 +12,16 @@ import { PopupWithForm } from "./components/PopupWithForm.js";
 import { UserInfo } from "./components/UserInfo.js";
 import { FormValidator } from "./components/FormValidator.js";
 
+const openImagePopup = (cardData: CardData): void => {
+  const popupWithImage = new PopupWithImage( cardData, "#image-popup");
+  popupWithImage.open();
+};
+
 const cardList = new Section<CardData>(
     {
         items: initialCards,
         renderer: (item) => {
-            const card = new Card(item, "#card-template", () => {
-              const popupWithImage = new PopupWithImage({name: item.name, link: item.link}, "#image-popup");
-              popupWithImage.open();
-            });
+            const card = new Card(item, "#card-template", () => openImagePopup(item));
             const cardElement = card.generateCard();   
             cardList.addItem(cardElement);
         }   
@@ -30,13 +32,14 @@ const cardList = new Section<CardData>(
 cardList.renderItems();
 
 const newCardPopup = new PopupWithForm({selector: "#new-card-popup", handleFormSubmit: (formValues) => {
-    const newCard = new Card({name: formValues["place-name"], link: formValues.link},"#card-template", ()=>{
-      const popupWithImage = new PopupWithImage({name: formValues["place-name"], link: formValues.link}, "#image-popup");
-      popupWithImage.open();
-    });
-    const cardElement = newCard.generateCard();   
-    cardList.addItem(cardElement);
-  }});
+  const cardData: CardData = {
+    name:formValues["place-name"],
+    link: formValues.link
+  }
+  const newCard = new Card( cardData, "#card-template", ()=> openImagePopup(cardData));
+  const cardElement = newCard.generateCard();   
+  cardList.addItem(cardElement);
+}});
 
 const user = new UserInfo({nameSelector:".profile__title" ,jobSelector:".profile__description"});
 
