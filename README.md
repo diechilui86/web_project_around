@@ -8,7 +8,7 @@ El proyecto fue refactorizado utilizando **TypeScript y Programación Orientada 
 
 El proyecto puede visualizarse en GitHub Pages:
 
-https://diechilui86.github.io/web_project_around_es/
+https://diechilui86.github.io/web_project_around/
 
 ## Funcionalidades
 
