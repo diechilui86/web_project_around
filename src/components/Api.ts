@@ -1,7 +1,6 @@
 import type { CardFormData, UserData, ApiOptions, UserFormData, CardData } from "../types/types.ts";
 import { Card } from "./Card.js";
 import { UserInfo } from "./UserInfo.js";
-import { initialCards, profileInputDescription, profileInputName, newCardBtn, profileEditBtn } from "../utils/constants.js";
 
 export class Api {
 
@@ -35,5 +34,20 @@ export class Api {
     } 
     throw new Error(`${res.status}`);
   }
+
+  async editProfile(userData:UserFormData): Promise<void>  {
+    const res:Response = await fetch(`${this.baseUrl}/users/me`, {
+      method:"PATCH",
+      headers: this.headers,
+      body: JSON.stringify({
+        name: userData.name,
+        about: userData.job
+      })
+    });
+    if(res.ok){
+      return await res.json();
+    }
+    throw new Error(`${res.status}`);
+  } 
 }
 

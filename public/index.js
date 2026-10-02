@@ -21,7 +21,8 @@ const newCardPopup = new PopupWithForm({ selector: "#new-card-popup", handleForm
     } });
 const user = new UserInfo({ nameSelector: ".profile__title", jobSelector: ".profile__description" });
 const profilePopup = new PopupWithForm({ selector: "#edit-popup", handleFormSubmit: (formValues) => {
-        //user.setUserInfo({name:formValues.name,job:formValues.description});
+        user.setUserInfo({ name: formValues.name, job: formValues.description });
+        api.editProfile({ name: formValues.name, job: formValues.description });
     } });
 newCardBtn.addEventListener("click", () => {
     cardFormValidator.resetValidation();
@@ -54,8 +55,8 @@ async function loadInitialData() {
             api.getUserInfo(),
             api.getInitialCards()
         ]);
-        // Aquí usas ambos resultados para renderizar la página
         user.setUserInfo({ name: userData.name, job: userData.about });
+        console.log("User data loaded:", userData);
         const cardList = new Section({
             items: initialCards,
             renderer: (item) => {

@@ -1,6 +1,5 @@
 import { Card } from "./Card.js";
 import { UserInfo } from "./UserInfo.js";
-import { initialCards, profileInputDescription, profileInputName, newCardBtn, profileEditBtn } from "../utils/constants.js";
 export class Api {
     baseUrl;
     headers;
@@ -22,6 +21,20 @@ export class Api {
         const res = await fetch(`${this.baseUrl}/cards`, {
             method: "GET",
             headers: this.headers
+        });
+        if (res.ok) {
+            return await res.json();
+        }
+        throw new Error(`${res.status}`);
+    }
+    async editProfile(userData) {
+        const res = await fetch(`${this.baseUrl}/users/me`, {
+            method: "PATCH",
+            headers: this.headers,
+            body: JSON.stringify({
+                name: userData.name,
+                about: userData.job
+            })
         });
         if (res.ok) {
             return await res.json();
