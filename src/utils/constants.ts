@@ -1,4 +1,4 @@
-import type { CardData, ConfigObject } from "../types/types.js";
+import type { CardFormData, ConfigObject } from "../types/types.js";
 
 export const defaultFormConfig: ConfigObject = {
   inputSelector: ".popup__input",
@@ -9,7 +9,7 @@ export const defaultFormConfig: ConfigObject = {
 }
 
 
-export const initialCards: CardData[] = [
+export const initialCards: CardFormData[] = [
   {
     name: "Valle de Yosemite",
     link: "https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg",

@@ -1,4 +1,4 @@
-import type { UserData } from "../types/types.js";
+import type { UserFormData } from "../types/types.js";
 
 export class UserInfo {
   private nameElement: HTMLElement;
@@ -11,8 +11,8 @@ export class UserInfo {
     
   }
 
-  getUserInfo(): UserData {
-    const userInfo: UserData ={
+  getUserInfo(): UserFormData {
+    const userInfo: UserFormData ={
       name: this.nameElement.textContent ?? "",
       job: this.jobElement.textContent ?? ""
     };
@@ -20,7 +20,7 @@ export class UserInfo {
     return userInfo;
   }
 
-  setUserInfo(userData:UserData):void{
+  setUserInfo(userData:UserFormData):void{
     this.nameElement.textContent = userData.name;
     this.jobElement.textContent = userData.job;
   }

@@ -1,12 +1,12 @@
 import { Popup } from "./Popup.js";
-import type {CardData} from "../types/types.js";
+import type {CardFormData} from "../types/types.js";
 
 export class PopupWithImage extends Popup {
     private name: string;
     private link: string;
 
 
-  constructor({name, link}: CardData, selector: string) {
+  constructor({name, link}: CardFormData, selector: string) {
     super(selector);
     this.name = name;
     this.link = link;

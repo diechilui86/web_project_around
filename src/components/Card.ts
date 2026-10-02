@@ -1,4 +1,4 @@
-import type { CardData } from "../types/types.js";
+import type { CardFormData } from "../types/types.js";
 
 export class Card {
     private name: string;
@@ -7,7 +7,7 @@ export class Card {
     private element!: HTMLElement;
     private handleCardClick: () => void;
 
-    constructor({name, link}: CardData, selector: string, handleCardClick: () => void) {
+    constructor({name, link}: CardFormData, selector: string, handleCardClick: () => void) {
         this.name = name;
         this.link = link;
         this.selector = selector;
