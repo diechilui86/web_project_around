@@ -1,15 +1,21 @@
-import type { CardFormData } from "../types/types.js";
+import type { CardData } from "../types/types.js";
+import {PopupWithConfirmation} from "./PopupWithConfirmation.js";
+import {api} from "../utils/constants.js";
 
 export class Card {
     private name: string;
     private link: string;
+    private isLiked: boolean;
+    private id: string;
     private selector: string;
     private element!: HTMLElement;
     private handleCardClick: () => void;
 
-    constructor({name, link}: CardFormData, selector: string, handleCardClick: () => void) {
+    constructor({name, link, isLiked, _id}: CardData, selector: string, handleCardClick: () => void) {
         this.name = name;
         this.link = link;
+        this.isLiked = isLiked;
+        this.id = _id;
         this.selector = selector;
         this.handleCardClick = handleCardClick;
     }
@@ -37,10 +43,19 @@ export class Card {
 
     private setEventListeners(): void {
         const likeBtn = this.element.querySelector(".card__like-button") as HTMLButtonElement;
-        likeBtn.addEventListener("click", () => likeBtn.classList.toggle("card__like-button_is-active"),);
+        likeBtn.addEventListener("click", () => {
+            likeBtn.classList.toggle("card__like-button_is-active")
+            console.log(this.isLiked);
+        });
 
         const deleteBtn = this.element.querySelector(".card__delete-button") as HTMLButtonElement;
-        deleteBtn.addEventListener("click", () => this.element.remove());
+        deleteBtn.addEventListener("click", () => {
+            const popupWithConfirmation = new PopupWithConfirmation({selector: "#confirm-popup", handleButtonClicked: () => {
+                api.deleteCard(this.id);
+                this.element.remove()
+            }});
+            popupWithConfirmation.open();
+        });
 
         const cardImage = this.element.querySelector(".card__image") as HTMLImageElement;
         cardImage.addEventListener("click", () => {

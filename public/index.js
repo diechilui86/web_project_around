@@ -1,23 +1,24 @@
 import { Card } from "./components/Card.js";
-import { profileInputDescription, profileInputName, newCardBtn, profileEditBtn, defaultFormConfig } from "./utils/constants.js";
+import { profileInputDescription, profileInputName, newCardBtn, profileEditBtn, defaultFormConfig, api } from "./utils/constants.js";
 import { Section } from "./components/Section.js";
 import { PopupWithImage } from "./components/PopupWithImage.js";
 import { PopupWithForm } from "./components/PopupWithForm.js";
 import { UserInfo } from "./components/UserInfo.js";
 import { FormValidator } from "./components/FormValidator.js";
-import { Api } from "./components/Api.js";
 const openImagePopup = (cardFormData) => {
     const popupWithImage = new PopupWithImage(cardFormData, "#image-popup");
     popupWithImage.open();
 };
+const cardList = new Section({
+    items: [],
+    renderer: (item) => renderCard(item, cardList)
+}, ".cards__list");
 const newCardPopup = new PopupWithForm({ selector: "#new-card-popup", handleFormSubmit: (formValues) => {
         const cardFormData = {
             name: formValues["place-name"],
             link: formValues.link
         };
-        const newCard = new Card(cardFormData, "#card-template", () => openImagePopup(cardFormData));
-        const cardElement = newCard.generateCard();
-        //cardList.addItem(cardElement);
+        handleNewCard(cardFormData);
     } });
 const user = new UserInfo({ nameSelector: ".profile__title", jobSelector: ".profile__description" });
 const profilePopup = new PopupWithForm({ selector: "#edit-popup", handleFormSubmit: (formValues) => {
@@ -41,14 +42,7 @@ profileFormValidator.enableValidation();
 const newCardForm = document.querySelector("#new-card-form");
 const cardFormValidator = new FormValidator(defaultFormConfig, newCardForm);
 cardFormValidator.enableValidation();
-//nuevo codigo de api
-const api = new Api({
-    baseUrl: "https://around-api.es.tripleten-services.com/v1",
-    headers: {
-        authorization: "95e73e25-ad72-41b0-8aef-314b7db440e0",
-        "Content-Type": "application/json"
-    }
-});
+/////////nuevo codigo de api////////
 async function loadInitialData() {
     try {
         const [userData, initialCards] = await Promise.all([
@@ -56,19 +50,26 @@ async function loadInitialData() {
             api.getInitialCards()
         ]);
         user.setUserInfo({ name: userData.name, job: userData.about });
-        console.log("User data loaded:", userData);
-        const cardList = new Section({
-            items: initialCards,
-            renderer: (item) => {
-                const card = new Card(item, "#card-template", () => openImagePopup(item));
-                const cardElement = card.generateCard();
-                cardList.addItem(cardElement);
-            }
-        }, ".cards__list");
-        cardList.renderItems();
+        initialCards.forEach((item) => {
+            renderCard(item, cardList);
+        });
     }
     catch (err) {
         console.error("Fallo al cargar datos iniciales:", err);
     }
 }
 loadInitialData();
+function renderCard(cardData, section) {
+    const card = new Card(cardData, "#card-template", () => openImagePopup(cardData));
+    const cardElement = card.generateCard();
+    section.addItem(cardElement);
+}
+async function handleNewCard(cardFormData) {
+    try {
+        const newCardData = await api.createCard(cardFormData);
+        renderCard(newCardData, cardList);
+    }
+    catch (err) {
+        console.error("Fallo al crear tarjeta:", err);
+    }
+}
