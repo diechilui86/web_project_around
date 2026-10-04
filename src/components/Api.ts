@@ -8,7 +8,6 @@ export class Api {
   constructor({baseUrl, headers}:ApiOptions) {
     this.baseUrl = baseUrl;
     this.headers = headers;
-  
   }
 
   private async checkResponse<T>(res: Response): Promise<T>{

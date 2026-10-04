@@ -2,9 +2,8 @@ import { Popup } from "./Popup.js";
 import type {CardFormData} from "../types/types.js";
 
 export class PopupWithImage extends Popup {
-    private name: string;
-    private link: string;
-
+  private name: string;
+  private link: string;
 
   constructor({name, link}: CardFormData, selector: string) {
     super(selector);

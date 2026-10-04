@@ -11,11 +11,7 @@ export class Card {
     private handleDeleteClick: (cardId: string, cardElement: HTMLElement) => void;  
     private handleLikeClick: (cardId: string,isLiked: boolean) => Promise<CardData>;
 
-    constructor({name, link, isLiked, _id}: CardData, selector: string, 
-        handleCardClick: () => void, 
-        handleDeleteClick: (cardId: string, cardElement: HTMLElement) => void, 
-        handleLikeClick: (cardId: string, isLiked: boolean) => Promise<CardData>) 
-        {
+    constructor({name, link, isLiked, _id}: CardData, selector: string, handleCardClick: () => void, handleDeleteClick: (cardId: string, cardElement: HTMLElement) => void, handleLikeClick: (cardId: string, isLiked: boolean) => Promise<CardData>) {
         this.name = name;
         this.link = link;
         this.isLiked = isLiked;
