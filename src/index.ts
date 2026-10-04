@@ -15,6 +15,7 @@ import { PopupWithForm } from "./components/PopupWithForm.js";
 import { UserInfo } from "./components/UserInfo.js";
 import { FormValidator } from "./components/FormValidator.js";
 import { UserAvatar } from "./components/UserAvatar.js";
+import { PopupWithConfirmation } from "./components/PopupWithConfirmation.js";
 
 const user = new UserInfo({nameSelector:".profile__title" ,jobSelector:".profile__description"});
 
@@ -30,6 +31,20 @@ const openImagePopup = (cardFormData: CardFormData): void => {
   const popupWithImage = new PopupWithImage( cardFormData, "#image-popup");
   popupWithImage.open();
 };
+const openConfirmationPopup = (cardId: string, cardElement: HTMLElement): void => {
+  const popupWithConfirmation = new PopupWithConfirmation({selector: "#confirm-popup", 
+    handleButtonClicked: async() => {
+      try{
+        await api.deleteCard(cardId);
+        cardElement.remove();
+      }
+      catch (err) {
+        console.error("Fallo al eliminar tarjeta:", err);
+      }
+    }
+  });
+  popupWithConfirmation.open();
+}
 
 const profilePopup = new PopupWithForm({selector:"#edit-popup",handleFormSubmit: async (formValues) => {
   try{
@@ -127,7 +142,11 @@ async function loadInitialData(): Promise<void>  {
 }
 
 function renderCard(cardData: CardData, section: Section<CardData>): void {
-  const card = new Card (cardData, "#card-template", () => openImagePopup(cardData));
+  const card = new Card (cardData, "#card-template", 
+    () => openImagePopup(cardData),
+    (cardId, cardElement) => openConfirmationPopup(cardId, cardElement),
+    (cardId, isLiked) => api.toggleLike(cardId, isLiked)
+  );
   const cardElement = card.generateCard(); 
   section.addItem(cardElement);
 }
@@ -141,3 +160,10 @@ function renderSavingState (isSaving: boolean, buttonElement: HTMLButtonElement,
 }
 
 loadInitialData();
+
+
+
+
+
+    
+          

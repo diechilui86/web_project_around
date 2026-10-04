@@ -1,6 +1,4 @@
 import type { CardData } from "../types/types.js";
-import {PopupWithConfirmation} from "./PopupWithConfirmation.js";
-import {api} from "../utils/constants.js";
 
 export class Card {
     private name: string;
@@ -10,14 +8,22 @@ export class Card {
     private selector: string;
     private element!: HTMLElement;
     private handleCardClick: () => void;
+    private handleDeleteClick: (cardId: string, cardElement: HTMLElement) => void;  
+    private handleLikeClick: (cardId: string,isLiked: boolean) => Promise<CardData>;
 
-    constructor({name, link, isLiked, _id}: CardData, selector: string, handleCardClick: () => void) {
+    constructor({name, link, isLiked, _id}: CardData, selector: string, 
+        handleCardClick: () => void, 
+        handleDeleteClick: (cardId: string, cardElement: HTMLElement) => void, 
+        handleLikeClick: (cardId: string, isLiked: boolean) => Promise<CardData>) 
+        {
         this.name = name;
         this.link = link;
         this.isLiked = isLiked;
         this.id = _id;
         this.selector = selector;
         this.handleCardClick = handleCardClick;
+        this.handleDeleteClick = handleDeleteClick;
+        this.handleLikeClick = handleLikeClick;
     }
 
     private getTemplate(): HTMLElement {
@@ -54,8 +60,8 @@ export class Card {
         this.updateLikeButton(likeBtn);
         likeBtn.addEventListener("click", async () => {
             try{
-                const cardLike = await api.toggleLike(this.id, this.isLiked);
-                this.isLiked = cardLike.isLiked;
+                const updatedCardData = await this.handleLikeClick(this.id, this.isLiked);
+                this.isLiked = updatedCardData.isLiked;
                 this.updateLikeButton(likeBtn);
             }
             catch (err) {
@@ -64,23 +70,10 @@ export class Card {
         });
 
         const deleteBtn = this.element.querySelector(".card__delete-button") as HTMLButtonElement;
-        deleteBtn.addEventListener("click", () => {
-            const popupWithConfirmation = new PopupWithConfirmation({selector: "#confirm-popup", handleButtonClicked: async () => {
-                try{
-                    await api.deleteCard(this.id);
-                    this.element.remove()
-                }
-                catch (err) {
-                    console.error("Fallo al eliminar tarjeta:", err);
-                }   
-            }});
-            popupWithConfirmation.open();
-        });
+        deleteBtn.addEventListener("click", () => this.handleDeleteClick(this.id, this.element));
 
         const cardImage = this.element.querySelector(".card__image") as HTMLImageElement;
-        cardImage.addEventListener("click", () => {
-            this.handleCardClick();
-        });
+        cardImage.addEventListener("click", () => this.handleCardClick());
     }
 
 }      

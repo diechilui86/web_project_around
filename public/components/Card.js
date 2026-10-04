@@ -1,5 +1,3 @@
-import { PopupWithConfirmation } from "./PopupWithConfirmation.js";
-import { api } from "../utils/constants.js";
 export class Card {
     name;
     link;
@@ -8,13 +6,17 @@ export class Card {
     selector;
     element;
     handleCardClick;
-    constructor({ name, link, isLiked, _id }, selector, handleCardClick) {
+    handleDeleteClick;
+    handleLikeClick;
+    constructor({ name, link, isLiked, _id }, selector, handleCardClick, handleDeleteClick, handleLikeClick) {
         this.name = name;
         this.link = link;
         this.isLiked = isLiked;
         this.id = _id;
         this.selector = selector;
         this.handleCardClick = handleCardClick;
+        this.handleDeleteClick = handleDeleteClick;
+        this.handleLikeClick = handleLikeClick;
     }
     getTemplate() {
         const cardTemplate = document.querySelector(this.selector);
@@ -44,8 +46,8 @@ export class Card {
         this.updateLikeButton(likeBtn);
         likeBtn.addEventListener("click", async () => {
             try {
-                const cardLike = await api.toggleLike(this.id, this.isLiked);
-                this.isLiked = cardLike.isLiked;
+                const updatedCardData = await this.handleLikeClick(this.id, this.isLiked);
+                this.isLiked = updatedCardData.isLiked;
                 this.updateLikeButton(likeBtn);
             }
             catch (err) {
@@ -53,21 +55,8 @@ export class Card {
             }
         });
         const deleteBtn = this.element.querySelector(".card__delete-button");
-        deleteBtn.addEventListener("click", () => {
-            const popupWithConfirmation = new PopupWithConfirmation({ selector: "#confirm-popup", handleButtonClicked: async () => {
-                    try {
-                        await api.deleteCard(this.id);
-                        this.element.remove();
-                    }
-                    catch (err) {
-                        console.error("Fallo al eliminar tarjeta:", err);
-                    }
-                } });
-            popupWithConfirmation.open();
-        });
+        deleteBtn.addEventListener("click", () => this.handleDeleteClick(this.id, this.element));
         const cardImage = this.element.querySelector(".card__image");
-        cardImage.addEventListener("click", () => {
-            this.handleCardClick();
-        });
+        cardImage.addEventListener("click", () => this.handleCardClick());
     }
 }

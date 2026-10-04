@@ -79,19 +79,14 @@ export class Api {
   }
 
   async toggleLike(cardId: string, isLiked: boolean): Promise<CardData> {
-    if (isLiked) {
-      const res:Response = await fetch(`${this.baseUrl}/cards/${cardId}/likes`, {
-        method: "DELETE",
-        headers: this.headers,
-      });
+    const res:Response = await fetch(`${this.baseUrl}/cards/${cardId}/likes`, {
+      method: isLiked ? "DELETE" : "PUT",
+      headers: this.headers,
+    });
+    if (res.ok) {
       return await res.json();
-    } else {
-      const res:Response = await fetch(`${this.baseUrl}/cards/${cardId}/likes`, {
-        method: "PUT",
-        headers: this.headers,
-      });
-      return await res.json();
-    } 
+    }
+    throw new Error(`${res.status}`);
   }
 
   async deleteCard(cardId: string): Promise<void> {

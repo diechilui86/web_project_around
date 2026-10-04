@@ -48,11 +48,11 @@ export class FormValidator {
     private validateInput(inputElement: HTMLInputElement): void{
         const errorElement = this.getErrorContainer(inputElement);
         if (!inputElement.validity.valid) {
-                    this.showInputError( errorElement, inputElement, inputElement.validationMessage);
-                } else {
-                    this.hideInputError(errorElement, inputElement);
-                }
-                this.toggleButtonState();
+            this.showInputError( errorElement, inputElement, inputElement.validationMessage);
+        } else {
+            this.hideInputError(errorElement, inputElement);
+        }
+        this.toggleButtonState();
     }
 
     private setEventListeners(): void {
@@ -65,7 +65,7 @@ export class FormValidator {
     }
 
     enableValidation(): void {
-            this.setEventListeners();
+        this.setEventListeners();
     }
 
     resetValidation(): void {
