@@ -85,7 +85,6 @@ async function loadInitialData(): Promise<void>  {
 
 loadInitialData();
 
-
 function renderCard(cardData: CardData, section: Section<CardData>): void {
   const card = new Card (cardData, "#card-template", () => openImagePopup(cardData));
   const cardElement = card.generateCard(); 

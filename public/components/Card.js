@@ -33,9 +33,18 @@ export class Card {
     }
     setEventListeners() {
         const likeBtn = this.element.querySelector(".card__like-button");
-        likeBtn.addEventListener("click", () => {
-            likeBtn.classList.toggle("card__like-button_is-active");
-            console.log(this.isLiked);
+        if (this.isLiked) {
+            likeBtn.classList.add("card__like-button_is-active");
+        }
+        likeBtn.addEventListener("click", async () => {
+            try {
+                const cardLike = await api.toggleLike(this.id, this.isLiked);
+                this.isLiked = cardLike.isLiked;
+                likeBtn.classList.toggle("card__like-button_is-active");
+            }
+            catch (err) {
+                console.error("Fallo al cambiar estado de like:", err);
+            }
         });
         const deleteBtn = this.element.querySelector(".card__delete-button");
         deleteBtn.addEventListener("click", () => {

@@ -1,6 +1,4 @@
 import type { CardFormData, UserData, ApiOptions, UserFormData, CardData } from "../types/types.ts";
-import { Card } from "./Card.js";
-import { UserInfo } from "./UserInfo.js";
 
 export class Api {
 
@@ -66,17 +64,21 @@ export class Api {
       throw new Error(`${res.status}`);
   }
 
-  // async toggleLike(cardId: string, isLiked: boolean): Promise<void> {
-  //   try {
-  //     const res:Response = await fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
-  //       method: "PATCH",
-  //       headers: this.headers,
-
-  //     });
-  //   } catch (err) {
-  //     console.error("Fallo al cambiar estado de like:", err);
-  //   }
-  // }
+  async toggleLike(cardId: string, isLiked: boolean): Promise<CardData> {
+    if (isLiked) {
+      const res:Response = await fetch(`${this.baseUrl}/cards/${cardId}/likes`, {
+        method: "DELETE",
+        headers: this.headers,
+      });
+      return await res.json();
+    } else {
+      const res:Response = await fetch(`${this.baseUrl}/cards/${cardId}/likes`, {
+        method: "PUT",
+        headers: this.headers,
+      });
+      return await res.json();
+    } 
+  }
 
   async deleteCard(cardId: string): Promise<void> {
     try {
