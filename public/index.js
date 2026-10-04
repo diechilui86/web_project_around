@@ -43,7 +43,7 @@ const profilePopup = new PopupWithForm({
                 name: formValues.name,
                 job: formValues.description,
             });
-            user.setUserInfo({ name: userData.name, job: userData.about });
+            user.setUserInfo(userData);
         }
         catch (err) {
             console.error("Fallo al actualiza perfil:", err);
@@ -122,7 +122,7 @@ async function loadInitialData() {
             api.getUserInfo(),
             api.getInitialCards(),
         ]);
-        user.setUserInfo({ name: userData.name, job: userData.about });
+        user.setUserInfo(userData);
         avatar.setAvatarUrl(userData.avatar);
         initialCards.forEach((item) => {
             renderCard(item, cardList);
@@ -133,7 +133,7 @@ async function loadInitialData() {
     }
 }
 function renderCard(cardData, section) {
-    const card = new Card(cardData, "#card-template", () => openImagePopup(cardData), (cardId, cardElement) => openConfirmationPopup(cardId, cardElement), (cardId, isLiked) => api.toggleLike(cardId, isLiked));
+    const card = new Card(cardData, user.getUserId(), "#card-template", () => openImagePopup(cardData), (cardId, cardElement) => openConfirmationPopup(cardId, cardElement), (cardId, isLiked) => api.toggleLike(cardId, isLiked));
     const cardElement = card.generateCard();
     section.addItem(cardElement);
 }

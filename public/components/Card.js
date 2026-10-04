@@ -3,16 +3,20 @@ export class Card {
     link;
     isLiked;
     id;
+    owner;
+    userId;
     selector;
     element;
     handleCardClick;
     handleDeleteClick;
     handleLikeClick;
-    constructor({ name, link, isLiked, _id }, selector, handleCardClick, handleDeleteClick, handleLikeClick) {
+    constructor({ name, link, isLiked, _id, owner }, userId, selector, handleCardClick, handleDeleteClick, handleLikeClick) {
         this.name = name;
         this.link = link;
         this.isLiked = isLiked;
         this.id = _id;
+        this.owner = owner;
+        this.userId = userId;
         this.selector = selector;
         this.handleCardClick = handleCardClick;
         this.handleDeleteClick = handleDeleteClick;
@@ -57,7 +61,12 @@ export class Card {
             }
         });
         const deleteBtn = this.element.querySelector(".card__delete-button");
-        deleteBtn.addEventListener("click", () => this.handleDeleteClick(this.id, this.element));
+        if (this.owner !== this.userId) {
+            deleteBtn.remove();
+        }
+        else {
+            deleteBtn.addEventListener("click", () => this.handleDeleteClick(this.id, this.element));
+        }
         const cardImage = this.element.querySelector(".card__image");
         cardImage.addEventListener("click", () => this.handleCardClick());
     }

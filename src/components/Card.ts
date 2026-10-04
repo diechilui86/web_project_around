@@ -5,6 +5,8 @@ export class Card {
   private link: string;
   private isLiked: boolean;
   private id: string;
+  private owner: string;
+  private userId: string;
   private selector: string;
   private element!: HTMLElement;
   private handleCardClick: () => void;
@@ -15,7 +17,8 @@ export class Card {
   ) => Promise<CardData>;
 
   constructor(
-    { name, link, isLiked, _id }: CardData,
+    { name, link, isLiked, _id, owner }: CardData,
+    userId: string,
     selector: string,
     handleCardClick: () => void,
     handleDeleteClick: (cardId: string, cardElement: HTMLElement) => void,
@@ -25,6 +28,8 @@ export class Card {
     this.link = link;
     this.isLiked = isLiked;
     this.id = _id;
+    this.owner = owner;
+    this.userId = userId;
     this.selector = selector;
     this.handleCardClick = handleCardClick;
     this.handleDeleteClick = handleDeleteClick;
@@ -87,9 +92,13 @@ export class Card {
     const deleteBtn = this.element.querySelector(
       ".card__delete-button",
     ) as HTMLButtonElement;
-    deleteBtn.addEventListener("click", () =>
-      this.handleDeleteClick(this.id, this.element),
-    );
+    if (this.owner !== this.userId) {
+      deleteBtn.remove();
+    } else {
+      deleteBtn.addEventListener("click", () =>
+        this.handleDeleteClick(this.id, this.element),
+      );
+    }
 
     const cardImage = this.element.querySelector(
       ".card__image",

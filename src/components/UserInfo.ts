@@ -1,8 +1,9 @@
-import type { UserFormData } from "../types/types.js";
+import type { UserFormData, UserData } from "../types/types.js";
 
 export class UserInfo {
   private nameElement: HTMLElement;
   private jobElement: HTMLElement;
+  private _id: string;
 
   constructor({
     nameSelector,
@@ -13,6 +14,7 @@ export class UserInfo {
   }) {
     this.nameElement = document.querySelector(nameSelector) as HTMLElement;
     this.jobElement = document.querySelector(jobSelector) as HTMLElement;
+    this._id = "";
   }
 
   getUserInfo(): UserFormData {
@@ -24,8 +26,13 @@ export class UserInfo {
     return userInfo;
   }
 
-  setUserInfo(userData: UserFormData): void {
+  setUserInfo(userData: UserData): void {
     this.nameElement.textContent = userData.name;
-    this.jobElement.textContent = userData.job;
+    this.jobElement.textContent = userData.about;
+    this._id = userData._id;
+  }
+
+  getUserId(): string {
+    return this._id;
   }
 }
