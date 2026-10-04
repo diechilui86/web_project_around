@@ -11,15 +11,19 @@ export class Api {
   
   }
 
+  private async checkResponse<T>(res: Response): Promise<T>{
+    if (res.ok) {
+      return await res.json();
+    }
+    throw new Error(`Error: ${res.status}`);
+  }
+
   async getUserInfo(): Promise<UserData> {
     const res:Response = await fetch(`${this.baseUrl}/users/me`, {
       method:"GET",
       headers: this.headers
     });
-    if(res.ok){
-      return await res.json();
-    }
-    throw new Error(`${res.status}`);  
+    return await this.checkResponse<UserData>(res);
   }
 
   async getInitialCards(): Promise<CardData[]> {
@@ -27,10 +31,7 @@ export class Api {
       method:"GET",
       headers: this.headers
     });
-    if (res.ok) {
-      return await res.json();
-    } 
-    throw new Error(`${res.status}`);
+    return await this.checkResponse<CardData[]>(res);
   }
 
   async editProfile(userData:UserFormData): Promise<UserData>  {
@@ -42,10 +43,7 @@ export class Api {
         about: userData.job
       })
     });
-    if (res.ok) {
-      return await res.json();
-    } 
-    throw new Error(`${res.status}`);
+    return await this.checkResponse<UserData>(res);
   } 
 
   async createCard(newCardData: CardFormData): Promise<CardData> {
@@ -58,10 +56,7 @@ export class Api {
         }),
       },
     );
-    if (res.ok) {
-      return await res.json();
-    } 
-    throw new Error(`${res.status}`);
+    return await this.checkResponse<CardData>(res);
   }
 
   async updateAvatar(avatarUrl: string): Promise<UserData>  { 
@@ -72,10 +67,7 @@ export class Api {
         avatar: avatarUrl
       })
     });
-    if (res.ok) {
-      return await res.json();
-    } 
-    throw new Error(`${res.status}`);
+    return await this.checkResponse<UserData>(res);
   }
 
   async toggleLike(cardId: string, isLiked: boolean): Promise<CardData> {
@@ -83,10 +75,7 @@ export class Api {
       method: isLiked ? "DELETE" : "PUT",
       headers: this.headers,
     });
-    if (res.ok) {
-      return await res.json();
-    }
-    throw new Error(`${res.status}`);
+    return await this.checkResponse<CardData>(res);
   }
 
   async deleteCard(cardId: string): Promise<void> {
@@ -94,10 +83,7 @@ export class Api {
       method: "DELETE",
       headers: this.headers,
     });
-    if (res.ok) {
-      return await res.json();
-    } 
-    throw new Error(`${res.status}`);
+    return await this.checkResponse<void>(res);
   }
 }
 

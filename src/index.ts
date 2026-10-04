@@ -97,6 +97,7 @@ profileEditBtn.addEventListener("click", () =>{
   const userData = user.getUserInfo();
   profileInputName.value = userData.name;
   profileInputDescription.value = userData.job;
+  profileFormValidator.updateButtonState();
   profilePopup.open();
 });
 
@@ -108,6 +109,7 @@ newCardBtn.addEventListener("click", () =>{
 const avatar = new UserAvatar(".profile__image-button", () => {
   avatarFormValidator.resetValidation();
   avatarInputUrl.value = avatar.getAvatarUrl();
+  avatarFormValidator.updateButtonState();
   newAvatarPopup.open();
 });
 

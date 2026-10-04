@@ -57,6 +57,7 @@ export class FormValidator {
     }
     enableValidation() {
         this.setEventListeners();
+        this.toggleButtonState();
     }
     resetValidation() {
         this.formElement.reset();
@@ -64,6 +65,9 @@ export class FormValidator {
             const errorElement = this.getErrorContainer(input);
             this.hideInputError(errorElement, input);
         });
+        this.toggleButtonState();
+    }
+    updateButtonState() {
         this.toggleButtonState();
     }
 }
