@@ -1,232 +1,226 @@
 # Around The U.S.
 
-Aplicación web interactiva desarrollada como parte del programa de desarrollo web. El proyecto permite editar la información del perfil de usuario, crear y eliminar tarjetas de lugares, marcar tarjetas como favoritas y visualizar sus imágenes en ventanas emergentes.
+Aplicación web interactiva desarrollada como parte del programa de desarrollo web. Permite administrar un perfil de usuario, compartir tarjetas de lugares, dar y quitar «me gusta» y visualizar imágenes en ventanas emergentes.
 
-El proyecto fue refactorizado utilizando **TypeScript y Programación Orientada a Objetos (POO)**, organizando las diferentes responsabilidades de la aplicación mediante clases reutilizables.
+El proyecto utiliza **TypeScript, Programación Orientada a Objetos (POO) e integración con una API REST**. Los datos del perfil, el avatar y las tarjetas se obtienen del servidor; sus modificaciones se guardan mediante solicitudes HTTP.
 
 ## Demo
 
-El proyecto puede visualizarse en GitHub Pages:
-
-https://diechilui86.github.io/web_project_around/
+[Ver el proyecto en GitHub Pages](https://diechilui86.github.io/web_project_around/)
 
 ## Funcionalidades
 
-- Editar el nombre y la descripción del perfil.
-- Agregar nuevas tarjetas indicando un nombre y una URL de imagen.
-- Eliminar tarjetas.
-- Marcar y desmarcar tarjetas como favoritas.
-- Visualizar las imágenes de las tarjetas en un popup.
-- Cerrar los popups mediante:
-  - Botón de cierre.
-  - Tecla `Escape`.
-  - Clic sobre el área sombreada.
-- Validar formularios utilizando la API nativa de validación de HTML.
-- Mostrar mensajes de error en los campos inválidos.
-- Activar y desactivar automáticamente los botones de envío según la validez del formulario.
-- Restablecer la validación cuando se vuelve a abrir un formulario.
-- Crear tarjetas dinámicamente utilizando elementos `<template>`.
+- Cargar el nombre, la descripción y el avatar del usuario desde el servidor.
+- Cargar las tarjetas del servidor después de recibir la información del usuario.
+- Editar y guardar el nombre y la descripción del perfil.
+- Actualizar el avatar mediante una URL de imagen.
+- Agregar tarjetas indicando un nombre y una URL de imagen.
+- Mostrar la papelera únicamente en las tarjetas creadas por el usuario actual.
+- Solicitar confirmación antes de eliminar una tarjeta.
+- Eliminar la tarjeta de la página después de recibir una respuesta correcta del servidor.
+- Dar y quitar «me gusta» y actualizar el corazón con el estado devuelto por la API.
+- Visualizar imágenes y sus títulos en un popup.
+- Cerrar los popups mediante el botón de cierre, la tecla `Escape` o un clic sobre el fondo.
+- Validar los formularios con la API nativa de validación de HTML.
+- Mostrar errores y desactivar el botón de envío cuando algún campo sea inválido.
+- Reiniciar la validación y recalcular el botón al abrir los formularios.
+- Mostrar «Guardando...» durante el envío de los formularios de perfil, tarjeta y avatar.
+- Registrar los errores de las solicitudes en la consola.
+- Crear tarjetas mediante un elemento `<template>`.
 
 ## Tecnologías utilizadas
 
-- HTML5
-- CSS3
-- TypeScript
-- JavaScript ES6+
-- Programación Orientada a Objetos (POO)
-- DOM API
-- HTML Form Validation API
-- ES Modules (`import` / `export`)
-- Interfaces y tipos de TypeScript
-- Genéricos de TypeScript
-- Herencia
-- Encapsulamiento
-- Callbacks
-- Git
-- GitHub
-- GitHub Pages
+- HTML5 y CSS3.
+- Diseño responsive y metodología BEM.
+- Fuentes locales en formato WOFF2.
+- TypeScript y JavaScript ES6+.
+- Programación Orientada a Objetos.
+- DOM API y HTML Constraint Validation API.
+- ES Modules (`import` / `export`).
+- Interfaces, genéricos y callbacks tipados.
+- Herencia y encapsulamiento.
+- Fetch API, JSON y API REST.
+- `async` / `await`, `Promise.all()` y `try...catch...finally`.
+- Git, GitHub y GitHub Pages.
 
 ## Programación Orientada a Objetos
 
-La lógica de la aplicación está dividida en clases con responsabilidades específicas.
+### `Api`
+
+Centraliza las solicitudes al servidor. Recibe la URL base y los encabezados de autorización y contenido. Su método privado genérico `checkResponse<T>()` comprueba `res.ok`, interpreta la respuesta JSON y lanza un error cuando la solicitud falla.
+
+Incluye los métodos `getUserInfo()`, `getInitialCards()`, `editProfile()`, `createCard()`, `toggleLike()`, `deleteCard()` y `updateAvatar()`.
 
 ### `Card`
 
-Responsable de crear una tarjeta individual, configurar su contenido y registrar sus eventos.
+Genera una tarjeta desde el template, configura su título e imagen y registra sus eventos. Conserva el ID, el propietario y el estado del like; compara el propietario con el ID del usuario para mostrar o retirar la papelera.
 
-Recibe un callback `handleCardClick` para comunicar el clic sobre una imagen sin depender directamente de la clase encargada del popup.
+Recibe callbacks para abrir imágenes, solicitar la eliminación y alternar likes. Actualiza el estado visual del corazón con la respuesta del servidor, sin importar directamente la API ni crear popups.
 
 ### `Section`
 
-Responsable de renderizar una colección de elementos dentro de un contenedor.
-
-La clase utiliza genéricos de TypeScript (`Section<T>`) para poder trabajar con diferentes tipos de datos.
+Administra un contenedor de elementos. Utiliza el genérico `Section<T>`, un callback de renderizado y los métodos `renderItems()` y `addItem()`. Este último inserta elementos al principio del contenedor.
 
 ### `Popup`
 
-Clase base para las ventanas emergentes.
-
-Contiene la funcionalidad común para:
-
-- Abrir un popup.
-- Cerrar un popup.
-- Cerrar mediante la tecla `Escape`.
-- Cerrar mediante el botón de cierre.
-- Cerrar haciendo clic sobre el área sombreada.
+Clase abstracta que concentra la apertura y el cierre de ventanas emergentes. Gestiona el botón de cierre, el clic en el fondo y la tecla `Escape`, añadiendo y retirando los listeners al abrir y cerrar.
 
 ### `PopupWithImage`
 
-Hereda de `Popup` y añade la funcionalidad necesaria para mostrar una imagen junto con su correspondiente leyenda.
+Hereda de `Popup` y muestra una imagen con su texto alternativo y leyenda.
 
 ### `PopupWithForm`
 
-Hereda de `Popup` y administra ventanas emergentes que contienen formularios.
+Hereda de `Popup`, obtiene los valores de los campos y ejecuta un callback al enviar el formulario. Espera al controlador asíncrono antes de cerrar y reinicia el formulario al cerrarlo.
 
-Se encarga de:
+Se utiliza para editar el perfil, crear tarjetas y actualizar el avatar.
 
-- Obtener los valores de los inputs.
-- Procesar el evento `submit`.
-- Ejecutar un callback con los datos del formulario.
-- Reiniciar el formulario después de cerrarlo.
+### `PopupWithConfirmation`
+
+Hereda de `Popup` y ejecuta un callback al pulsar «Sí». Espera al controlador antes de cerrar la confirmación de eliminación.
 
 ### `FormValidator`
 
-Encapsula la lógica de validación de los formularios.
+Encapsula la validación con una configuración reutilizable de selectores y clases CSS. Valida campos, muestra u oculta errores y controla el estado del botón de envío.
 
-La configuración de selectores y clases CSS se proporciona mediante el objeto `defaultFormConfig`, permitiendo reutilizar la misma clase con diferentes formularios.
-
-La clase permite:
-
-- Validar los campos de entrada.
-- Mostrar y ocultar mensajes de error.
-- Activar o desactivar el botón de envío.
-- Restablecer el estado de validación.
+- `enableValidation()`: registra los eventos e inicializa el botón.
+- `resetValidation()`: reinicia el formulario, limpia los errores y recalcula el botón.
+- `updateButtonState()`: recalcula el botón después de rellenar campos desde JavaScript.
 
 ### `UserInfo`
 
-Responsable de administrar la información del usuario mostrada en la página.
+Administra el nombre y la descripción mostrados en la página y conserva el ID del usuario recibido del servidor. Expone `getUserInfo()`, `setUserInfo()` y `getUserId()`.
 
-Incluye métodos para:
+### `UserAvatar`
 
-- Obtener el nombre y la descripción actuales.
-- Actualizar esos datos en el DOM.
+Administra la imagen de perfil mediante `getAvatarUrl()` y `setAvatarUrl()`. Registra el clic sobre el avatar y ejecuta el callback que abre su formulario.
+
+## Integración con la API
+
+URL base: `https://around-api.es.tripleten-services.com/v1`.
+
+| Operación | Método | Ruta |
+| --- | --- | --- |
+| Obtener usuario | GET | `/users/me` |
+| Obtener tarjetas | GET | `/cards` |
+| Editar perfil | PATCH | `/users/me` |
+| Crear tarjeta | POST | `/cards` |
+| Dar «me gusta» | PUT | `/cards/:cardId/likes` |
+| Quitar «me gusta» | DELETE | `/cards/:cardId/likes` |
+| Eliminar tarjeta | DELETE | `/cards/:cardId` |
+| Actualizar avatar | PATCH | `/users/me/avatar` |
+
+Las solicitudes incluyen el encabezado `authorization` y `Content-Type: application/json`. Los cuerpos se convierten con `JSON.stringify()`.
+
+La carga inicial utiliza `Promise.all()` para obtener usuario y tarjetas en paralelo. Una vez recibidas ambas respuestas, se actualiza el perfil y se renderizan las tarjetas con el ID del usuario disponible.
+
+Los controladores actualizan los datos visibles después de esperar la API. Los errores se procesan mediante `try...catch`, y el texto de los botones se restaura mediante `finally`.
 
 ## TypeScript
 
-El código fuente de la aplicación se encuentra dentro de `src/`.
-
-TypeScript está configurado mediante `tsconfig.json` para utilizar:
+El código fuente está en `src/` y el JavaScript compilado se genera en `public/`. La configuración incluye:
 
 ```json
 {
   "rootDir": "./src",
   "outDir": "./public",
+  "module": "es6",
+  "target": "es2022",
+  "strict": true,
   "allowJs": true,
-  "strict": true
+  "verbatimModuleSyntax": true,
+  "isolatedModules": true
 }
 ```
 
-De esta forma, TypeScript toma los archivos fuente desde `src/` y genera los archivos JavaScript compilados dentro de `public/`.
+Las interfaces separan los datos de entrada de las respuestas del servidor:
 
-Para compilar el proyecto se puede utilizar:
+| Interfaz | Uso |
+| --- | --- |
+| `CardFormData` | Nombre y enlace enviados para crear una tarjeta. |
+| `CardData` | Tarjeta completa: ID, propietario, fecha y estado del like. |
+| `UserFormData` | Nombre y descripción del formulario; `job` se envía a la API como `about`. |
+| `UserData` | Respuesta del usuario con nombre, descripción, avatar e ID. |
+| `ConfigObject` | Configuración de la validación. |
+| `ApiOptions` | URL base y encabezados de la API. |
+
+## Desarrollo local
+
+Necesitas Git, Node.js y el compilador de TypeScript. El repositorio no incluye actualmente un `package.json` ni scripts de npm.
+
+Clona el repositorio:
+
+```bash
+git clone https://github.com/diechilui86/web_project_around.git
+cd web_project_around
+```
+
+Si no tienes el compilador instalado:
+
+```bash
+npm install --global typescript
+```
+
+Compila desde la raíz:
 
 ```bash
 tsc
 ```
 
-Durante el desarrollo también se puede utilizar:
+Para recompilar durante el desarrollo:
 
 ```bash
 tsc --watch
 ```
 
-para recompilar automáticamente después de realizar cambios.
+Abre `public/index.html` mediante un servidor HTTP local, por ejemplo con Live Server de VS Code. El proyecto utiliza módulos ES.
+
+Antes de publicar cambios de TypeScript, recompila y añade también los archivos actualizados de `public/` al commit. La configuración de la API se encuentra en `src/utils/constants.ts`.
 
 ## Estructura del proyecto
 
-```text
-web_project_around_es/
-│
-├── public/
-│   ├── blocks/
-│   ├── images/
-│   ├── pages/
-│   ├── vendor/
-│   ├── index.html
-│   └── index.js
-│
-├── src/
-│   ├── components/
-│   │   ├── Card.ts
-│   │   ├── FormValidator.ts
-│   │   ├── Popup.ts
-│   │   ├── PopupWithForm.ts
-│   │   ├── PopupWithImage.ts
-│   │   ├── Section.ts
-│   │   └── UserInfo.ts
-│   │
-│   ├── types/
-│   │   └── types.ts
-│   │
-│   ├── utils/
-│   │   └── constants.ts
-│   │
-│   └── index.ts
-│
-├── tsconfig.json
-└── README.md
-```
+| Ruta | Contenido |
+| --- | --- |
+| `src/index.ts` | Instancias, callbacks, eventos y coordinación de la aplicación. |
+| `src/components/` | Las diez clases: `Api`, `Card`, `Section`, `Popup`, `PopupWithForm`, `PopupWithImage`, `PopupWithConfirmation`, `FormValidator`, `UserInfo` y `UserAvatar`. |
+| `src/types/types.ts` | Interfaces compartidas. |
+| `src/utils/constants.ts` | Configuración de validación, selectores e instancia de API. |
+| `public/index.html` | Página, template de tarjeta y cinco popups. |
+| `public/index.css` | Importaciones de estilos. |
+| `public/blocks/` | Estilos CSS por bloque. |
+| `public/images/` | Imágenes e iconos SVG. |
+| `public/vendor/` | Normalize.css, estilos de fuentes y archivos WOFF2. |
+| `public/components/`, `public/types/`, `public/utils/` | Módulos JavaScript compilados. |
+| `public/index.js` | Entrada compilada de la aplicación. |
+| `tsconfig.json` | Configuración del compilador. |
+| `.gitignore` | Exclusión de `node_modules/` y `.DS_Store`. |
+| `README.md` | Documentación del proyecto. |
 
 ## Arquitectura
 
-El proyecto utiliza una arquitectura basada en componentes y clases con responsabilidades independientes.
+`index.ts` coordina las instancias y conecta los componentes mediante callbacks. `Api` se instancia una vez en `constants.ts`; `UserInfo` conserva la identidad del usuario y `Section` administra la lista de tarjetas.
 
-```text
-index.ts
-   │
-   ├── Section
-   │     └── Card
-   │
-   ├── Popup
-   │     ├── PopupWithImage
-   │     └── PopupWithForm
-   │
-   ├── FormValidator
-   │
-   └── UserInfo
-```
-
-Las clases `PopupWithImage` y `PopupWithForm` utilizan herencia para reutilizar el comportamiento común definido por `Popup`.
-
-`Card` utiliza un callback para comunicarse con el popup de imagen, reduciendo el acoplamiento entre las clases.
+Cada tarjeta tiene su propia instancia de `Card`, y cada formulario validado tiene una instancia de `FormValidator`. Las tres subclases de `Popup` reutilizan el comportamiento común mediante herencia. Los elementos de los popups están definidos en HTML.
 
 ## Conceptos aplicados
 
-Durante el desarrollo y refactorización del proyecto se aplicaron:
-
-- Programación Orientada a Objetos.
-- Clases y constructores.
-- Propiedades y métodos públicos y privados.
-- Herencia mediante `extends`.
-- Reutilización de métodos mediante `super`.
-- Sobrescritura de métodos.
-- Encapsulamiento.
-- Interfaces de TypeScript.
-- Tipos personalizados.
-- Genéricos.
-- Callbacks tipados.
-- Manipulación del DOM.
-- Eventos del navegador.
-- Formularios y eventos `submit` e `input`.
-- Validación mediante `validity`.
-- Creación de elementos mediante `<template>`.
-- Módulos ES mediante `import` y `export`.
+- Clases, constructores, métodos y propiedades públicas, privadas y protegidas.
+- Herencia, `super` y sobrescritura de métodos.
+- Interfaces, tipos de función y genéricos.
+- Callbacks para reducir el acoplamiento entre componentes.
+- Eventos `click`, `submit`, `input` y `keydown`.
+- Validación mediante `validity` y `validationMessage`.
+- Inserción de tarjetas con `<template>`, `cloneNode()` y `prepend()`.
+- Actualización de textos mediante `textContent`.
+- Solicitudes HTTP con Fetch API y serialización JSON.
+- Flujo asíncrono, carga paralela y manejo de errores.
+- Comparación del propietario de una tarjeta con el usuario actual.
 
 ## Diseño
 
-La interfaz está diseñada para adaptarse a diferentes tamaños de pantalla mediante CSS responsive.
+La interfaz utiliza media queries, Flexbox y CSS Grid para adaptar la distribución a diferentes tamaños de pantalla. Los estilos se organizan con la metodología **BEM (Block, Element, Modifier)**.
 
-Para la organización de los estilos CSS se utiliza la metodología **BEM (Block, Element, Modifier)**.
+Incluye fuentes Inter locales, Normalize.css, iconos SVG y estados visuales para botones, errores de validación, likes y edición del avatar.
 
 ## Autor
 
