@@ -32,22 +32,49 @@ const openImagePopup = (cardFormData: CardFormData): void => {
 };
 
 const profilePopup = new PopupWithForm({selector:"#edit-popup",handleFormSubmit: async (formValues) => {
-  user.setUserInfo({name:formValues.name,job:formValues.description});
-  await api.editProfile({name:formValues.name,job:formValues.description}, profilePopup.popupButtonElement);
+  try{
+    renderSavingState(true, profilePopup.popupButtonElement, "Guardar");
+    const userData = await api.editProfile({name:formValues.name,job:formValues.description});
+    user.setUserInfo({name:userData.name,job:userData.about});
+  }
+  catch (err) {
+    console.error("Fallo al actualiza perfil:", err);
+  }
+  finally {
+    renderSavingState(false, profilePopup.popupButtonElement, "Guardar");
+  }
 }});
 
 const newCardPopup = new PopupWithForm({selector: "#new-card-popup", handleFormSubmit: async (formValues) => {
-  const cardFormData: CardFormData = {
-    name:formValues["place-name"],
-    link: formValues.link
+  try{
+    renderSavingState(true, newCardPopup.popupButtonElement, "Crear");
+    const cardFormData: CardFormData = {
+      name:formValues["place-name"],
+      link: formValues.link
+    }
+    const newCardData = await api.createCard(cardFormData);
+    renderCard(newCardData, cardList);
   }
-  const newCardData = await api.createCard(cardFormData, newCardPopup.popupButtonElement);
-  renderCard(newCardData, cardList);
+  catch (err) {
+    console.error("Fallo al crear tarjeta:", err);
+  }  
+  finally {
+    renderSavingState(false, newCardPopup.popupButtonElement, "Crear");
+  } 
 }});
 
 const newAvatarPopup = new PopupWithForm({selector:"#avatar-popup",handleFormSubmit: async(formValues) => {
-  await api.updateAvatar(formValues.link, newAvatarPopup.popupButtonElement);
-  avatar.setAvatarUrl(formValues.link);
+  try{
+    renderSavingState(true, newAvatarPopup.popupButtonElement, "Guardar");
+    const userData = await api.updateAvatar(formValues.link);
+    avatar.setAvatarUrl(userData.avatar);
+  }
+  catch (err) {
+    console.error("Fallo al actualiza avatar:", err);
+  }
+  finally {
+    renderSavingState(false, newAvatarPopup.popupButtonElement, "Guardar");
+  }
 }});
 
 profileEditBtn.addEventListener("click", () =>{
@@ -103,6 +130,14 @@ function renderCard(cardData: CardData, section: Section<CardData>): void {
   const card = new Card (cardData, "#card-template", () => openImagePopup(cardData));
   const cardElement = card.generateCard(); 
   section.addItem(cardElement);
+}
+
+function renderSavingState (isSaving: boolean, buttonElement: HTMLButtonElement, originalText: string): void { 
+  if (isSaving) {
+    buttonElement.textContent = "Guardando...";
+  } else {
+    buttonElement.textContent = originalText;
+  }
 }
 
 loadInitialData();

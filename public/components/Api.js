@@ -25,48 +25,46 @@ export class Api {
         }
         throw new Error(`${res.status}`);
     }
-    async editProfile(userData, buttonElement) {
-        try {
-            this.renderSavingState(true, buttonElement, "Guardar");
-            const res = await fetch(`${this.baseUrl}/users/me`, {
-                method: "PATCH",
-                headers: this.headers,
-                body: JSON.stringify({
-                    name: userData.name,
-                    about: userData.job
-                })
-            });
+    async editProfile(userData) {
+        const res = await fetch(`${this.baseUrl}/users/me`, {
+            method: "PATCH",
+            headers: this.headers,
+            body: JSON.stringify({
+                name: userData.name,
+                about: userData.job
+            })
+        });
+        if (res.ok) {
+            return await res.json();
         }
-        catch (err) {
-            console.error("Fallo al actualiza perfil:", err);
-        }
-        finally {
-            this.renderSavingState(false, buttonElement, "Guardar");
-        }
+        throw new Error(`${res.status}`);
     }
-    async createCard(newCardData, buttonElement) {
-        try {
-            this.renderSavingState(true, buttonElement, "Crear");
-            const res = await fetch(`${this.baseUrl}/cards`, {
-                method: "POST",
-                headers: this.headers,
-                body: JSON.stringify({
-                    name: newCardData.name,
-                    link: newCardData.link
-                }),
-            });
-            if (res.ok) {
-                return await res.json();
-            }
-            throw new Error(`${res.status}`);
+    async createCard(newCardData) {
+        const res = await fetch(`${this.baseUrl}/cards`, {
+            method: "POST",
+            headers: this.headers,
+            body: JSON.stringify({
+                name: newCardData.name,
+                link: newCardData.link
+            }),
+        });
+        if (res.ok) {
+            return await res.json();
         }
-        catch (err) {
-            console.error("Fallo al crear tarjeta:", err);
-            throw err;
+        throw new Error(`${res.status}`);
+    }
+    async updateAvatar(avatarUrl) {
+        const res = await fetch(`${this.baseUrl}/users/me/avatar`, {
+            method: "PATCH",
+            headers: this.headers,
+            body: JSON.stringify({
+                avatar: avatarUrl
+            })
+        });
+        if (res.ok) {
+            return await res.json();
         }
-        finally {
-            this.renderSavingState(false, buttonElement, "Crear");
-        }
+        throw new Error(`${res.status}`);
     }
     async toggleLike(cardId, isLiked) {
         if (isLiked) {
@@ -85,40 +83,13 @@ export class Api {
         }
     }
     async deleteCard(cardId) {
-        try {
-            const res = await fetch(`${this.baseUrl}/cards/${cardId}`, {
-                method: "DELETE",
-                headers: this.headers,
-            });
+        const res = await fetch(`${this.baseUrl}/cards/${cardId}`, {
+            method: "DELETE",
+            headers: this.headers,
+        });
+        if (res.ok) {
+            return await res.json();
         }
-        catch (err) {
-            console.error("Fallo al eliminar tarjeta:", err);
-        }
-    }
-    async updateAvatar(avatarUrl, buttonElement) {
-        try {
-            this.renderSavingState(true, buttonElement, "Guardar");
-            const res = await fetch(`${this.baseUrl}/users/me/avatar`, {
-                method: "PATCH",
-                headers: this.headers,
-                body: JSON.stringify({
-                    avatar: avatarUrl
-                })
-            });
-        }
-        catch (err) {
-            console.error("Fallo al actualiza avatar:", err);
-        }
-        finally {
-            this.renderSavingState(false, buttonElement, "Guardar");
-        }
-    }
-    renderSavingState(isSaving, buttonElement, originalText) {
-        if (isSaving) {
-            buttonElement.textContent = "Guardando...";
-        }
-        else {
-            buttonElement.textContent = originalText;
-        }
+        throw new Error(`${res.status}`);
     }
 }

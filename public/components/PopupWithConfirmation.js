@@ -15,9 +15,9 @@ export class PopupWithConfirmation extends Popup {
         super.removeEventListeners();
         this.buttonElement.removeEventListener("click", this.handleClick);
     }
-    handleClick = (event) => {
+    handleClick = async (event) => {
         event.preventDefault();
-        this.handleButtonClicked();
+        await this.handleButtonClicked();
         this.close();
     };
 }

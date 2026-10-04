@@ -65,9 +65,14 @@ export class Card {
 
         const deleteBtn = this.element.querySelector(".card__delete-button") as HTMLButtonElement;
         deleteBtn.addEventListener("click", () => {
-            const popupWithConfirmation = new PopupWithConfirmation({selector: "#confirm-popup", handleButtonClicked: () => {
-                api.deleteCard(this.id);
-                this.element.remove()
+            const popupWithConfirmation = new PopupWithConfirmation({selector: "#confirm-popup", handleButtonClicked: async () => {
+                try{
+                    await api.deleteCard(this.id);
+                    this.element.remove()
+                }
+                catch (err) {
+                    console.error("Fallo al eliminar tarjeta:", err);
+                }   
             }});
             popupWithConfirmation.open();
         });

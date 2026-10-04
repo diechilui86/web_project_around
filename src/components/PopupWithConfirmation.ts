@@ -1,6 +1,6 @@
 import { Popup } from "./Popup.js";
 
-type buttonClickedHandler = () => void;
+type buttonClickedHandler = () => void | Promise<void>;
 
 export class PopupWithConfirmation extends Popup {
     private buttonElement!: HTMLButtonElement;
@@ -22,9 +22,9 @@ export class PopupWithConfirmation extends Popup {
         this.buttonElement.removeEventListener("click", this.handleClick);
     }
 
-    private handleClick = (event: MouseEvent) => {
+    private handleClick =  async (event: MouseEvent): Promise<void> => {
         event.preventDefault();
-        this.handleButtonClicked();
+        await this.handleButtonClicked();
         this.close();
     }
   
