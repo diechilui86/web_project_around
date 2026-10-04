@@ -25,8 +25,9 @@ export class Api {
         }
         throw new Error(`${res.status}`);
     }
-    async editProfile(userData) {
+    async editProfile(userData, buttonElement) {
         try {
+            this.renderSavingState(true, buttonElement, "Guardar");
             const res = await fetch(`${this.baseUrl}/users/me`, {
                 method: "PATCH",
                 headers: this.headers,
@@ -39,20 +40,33 @@ export class Api {
         catch (err) {
             console.error("Fallo al actualiza perfil:", err);
         }
-    }
-    async createCard(newCardData) {
-        const res = await fetch(`${this.baseUrl}/cards`, {
-            method: "POST",
-            headers: this.headers,
-            body: JSON.stringify({
-                name: newCardData.name,
-                link: newCardData.link
-            }),
-        });
-        if (res.ok) {
-            return await res.json();
+        finally {
+            this.renderSavingState(false, buttonElement, "Guardar");
         }
-        throw new Error(`${res.status}`);
+    }
+    async createCard(newCardData, buttonElement) {
+        try {
+            this.renderSavingState(true, buttonElement, "Crear");
+            const res = await fetch(`${this.baseUrl}/cards`, {
+                method: "POST",
+                headers: this.headers,
+                body: JSON.stringify({
+                    name: newCardData.name,
+                    link: newCardData.link
+                }),
+            });
+            if (res.ok) {
+                return await res.json();
+            }
+            throw new Error(`${res.status}`);
+        }
+        catch (err) {
+            console.error("Fallo al crear tarjeta:", err);
+            throw err;
+        }
+        finally {
+            this.renderSavingState(false, buttonElement, "Crear");
+        }
     }
     async toggleLike(cardId, isLiked) {
         if (isLiked) {
@@ -79,6 +93,32 @@ export class Api {
         }
         catch (err) {
             console.error("Fallo al eliminar tarjeta:", err);
+        }
+    }
+    async updateAvatar(avatarUrl, buttonElement) {
+        try {
+            this.renderSavingState(true, buttonElement, "Guardar");
+            const res = await fetch(`${this.baseUrl}/users/me/avatar`, {
+                method: "PATCH",
+                headers: this.headers,
+                body: JSON.stringify({
+                    avatar: avatarUrl
+                })
+            });
+        }
+        catch (err) {
+            console.error("Fallo al actualiza avatar:", err);
+        }
+        finally {
+            this.renderSavingState(false, buttonElement, "Guardar");
+        }
+    }
+    renderSavingState(isSaving, buttonElement, originalText) {
+        if (isSaving) {
+            buttonElement.textContent = "Guardando...";
+        }
+        else {
+            buttonElement.textContent = originalText;
         }
     }
 }

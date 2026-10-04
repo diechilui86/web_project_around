@@ -1,3 +1,4 @@
-.popup__content_no-input {
+.popup__content_no-input,
+.popup__content_one-input {
   min-height: 180px;
 }

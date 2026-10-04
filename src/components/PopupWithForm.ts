@@ -1,6 +1,6 @@
 import { Popup } from "./Popup.js";
 
-type FormSubmit = (formValues: FormValues) => void;
+type FormSubmit = (formValues: FormValues) => void | Promise<void>;
 
 interface FormValues{
   [key: string]: string;
@@ -40,9 +40,9 @@ export class PopupWithForm extends Popup {
     this.formElement.removeEventListener("submit", this.handleSubmit);
   }
 
-  private handleSubmit = (event: SubmitEvent) => {
+  private handleSubmit = async (event: SubmitEvent): Promise<void> => {
     event.preventDefault();
-    this.handleFormSubmit(this.getInputValues());
+    await this.handleFormSubmit(this.getInputValues());
     this.close();
   }
 

@@ -34,6 +34,7 @@ export const initialCards = [
 ];
 export const profileInputName = document.querySelector(".popup__input_type_name");
 export const profileInputDescription = document.querySelector(".popup__input_type_description");
+export const avatarInputUrl = document.querySelector(".popup__input_avatar-url");
 export const newCardBtn = document.querySelector(".profile__add-button");
 export const profileEditBtn = document.querySelector(".profile__edit-button");
 export const api = new Api({

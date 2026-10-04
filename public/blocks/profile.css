@@ -46,6 +46,36 @@
   margin-right: 29px;
 }
 
+.profile__image-button {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin-right: 29px;
+  padding: 0;
+  border: none;
+  overflow: hidden;
+  background-color: #000;
+}
+
+.profile__image-button::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("../images/edit-icon.svg") center / 26px 26px no-repeat;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.profile__image-button:hover .profile__image,
+.profile__image-button:focus-visible .profile__image {
+  opacity: 0.2;
+}
+
+.profile__image-button:hover::after,
+.profile__image-button:focus-visible::after {
+  opacity: 1;
+}
+
 .profile__add-button {
   width: 150px;
   height: 50px;
@@ -134,5 +164,9 @@
     width: 18px;
     height: 18px;
     background-size: 8px 8px;
+  }
+
+  .profile__image-button {
+    margin-right: 0;
   }
 }

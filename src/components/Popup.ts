@@ -3,11 +3,13 @@ export abstract class Popup {
   protected selector: string;
   protected popupElement: HTMLElement;
   private closeButton: HTMLButtonElement;
+  public popupButtonElement: HTMLButtonElement;
 
   constructor(selector: string) {
     this.selector = selector;
     this.popupElement = document.querySelector(this.selector) as HTMLElement;
     this.closeButton = this.popupElement.querySelector(".popup__close") as HTMLButtonElement;
+    this.popupButtonElement = this.popupElement.querySelector(".popup__button") as HTMLButtonElement;
   }
   
   open(): void { 

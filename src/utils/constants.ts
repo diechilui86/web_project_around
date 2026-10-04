@@ -9,7 +9,6 @@ export const defaultFormConfig: ConfigObject = {
   errorClass: "popup__input-error_active",
 }
 
-
 export const initialCards: CardFormData[] = [
   {
     name: "Valle de Yosemite",
@@ -39,6 +38,7 @@ export const initialCards: CardFormData[] = [
 
 export const profileInputName = document.querySelector(".popup__input_type_name") as HTMLInputElement;
 export const profileInputDescription = document.querySelector(".popup__input_type_description") as HTMLInputElement;
+export const avatarInputUrl = document.querySelector(".popup__input_avatar-url") as HTMLInputElement;
 export const newCardBtn = document.querySelector(".profile__add-button") as HTMLButtonElement;
 export const profileEditBtn = document.querySelector(".profile__edit-button") as HTMLButtonElement;
 export const api = new Api({

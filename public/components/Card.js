@@ -31,7 +31,7 @@ export class Card {
         cardImage.alt = this.name;
         return this.element;
     }
-    handleLikeClick(likeBtn) {
+    updateLikeButton(likeBtn) {
         if (this.isLiked) {
             likeBtn.classList.add("card__like-button_is-active");
         }
@@ -41,12 +41,12 @@ export class Card {
     }
     setEventListeners() {
         const likeBtn = this.element.querySelector(".card__like-button");
-        this.handleLikeClick(likeBtn);
+        this.updateLikeButton(likeBtn);
         likeBtn.addEventListener("click", async () => {
             try {
                 const cardLike = await api.toggleLike(this.id, this.isLiked);
                 this.isLiked = cardLike.isLiked;
-                this.handleLikeClick(likeBtn);
+                this.updateLikeButton(likeBtn);
             }
             catch (err) {
                 console.error("Fallo al cambiar estado de like:", err);

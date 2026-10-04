@@ -2,10 +2,12 @@ export class Popup {
     selector;
     popupElement;
     closeButton;
+    popupButtonElement;
     constructor(selector) {
         this.selector = selector;
         this.popupElement = document.querySelector(this.selector);
         this.closeButton = this.popupElement.querySelector(".popup__close");
+        this.popupButtonElement = this.popupElement.querySelector(".popup__button");
     }
     open() {
         this.popupElement.classList.add("popup_is-opened");

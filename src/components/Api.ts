@@ -33,8 +33,9 @@ export class Api {
     throw new Error(`${res.status}`);
   }
 
-  async editProfile(userData:UserFormData): Promise<void>  {
+  async editProfile(userData:UserFormData, buttonElement: HTMLButtonElement): Promise<void>  {
     try {
+      this.renderSavingState(true, buttonElement, "Guardar");
       const res:Response = await fetch(`${this.baseUrl}/users/me`, {
         method:"PATCH",
         headers: this.headers,
@@ -45,10 +46,14 @@ export class Api {
       });
     } catch (err) {
       console.error("Fallo al actualiza perfil:", err);
+    }finally {
+      this.renderSavingState(false, buttonElement, "Guardar");
     }
   } 
 
-  async createCard(newCardData: CardFormData): Promise<CardData> {
+  async createCard(newCardData: CardFormData, buttonElement: HTMLButtonElement): Promise<CardData> {
+    try{
+      this.renderSavingState(true, buttonElement, "Crear");
       const res:Response = await fetch(`${this.baseUrl}/cards`, {
           method: "POST",
           headers: this.headers,
@@ -62,6 +67,12 @@ export class Api {
         return await res.json();
       } 
       throw new Error(`${res.status}`);
+    } catch (err) {
+        console.error("Fallo al crear tarjeta:", err);
+        throw err;
+    }  finally {
+      this.renderSavingState(false, buttonElement, "Crear");
+    } 
   }
 
   async toggleLike(cardId: string, isLiked: boolean): Promise<CardData> {
@@ -91,6 +102,30 @@ export class Api {
     }
   }
 
+  async updateAvatar(avatarUrl: string, buttonElement: HTMLButtonElement): Promise<void>  {
+    try {
+      this.renderSavingState(true, buttonElement, "Guardar");
+      const res:Response = await fetch(`${this.baseUrl}/users/me/avatar`, {
+        method:"PATCH",
+        headers: this.headers,
+        body: JSON.stringify({
+          avatar: avatarUrl
+        })
+      });
+    } catch (err) {
+      console.error("Fallo al actualiza avatar:", err);
+    }finally {
+      this.renderSavingState(false, buttonElement, "Guardar");
+    }
+  } 
+
+  private renderSavingState(isSaving: boolean, buttonElement: HTMLButtonElement, originalText: string): void { 
+    if (isSaving) {
+      buttonElement.textContent = "Guardando...";
+    } else {
+      buttonElement.textContent = originalText;
+    }
+  } 
   
 }
 
