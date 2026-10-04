@@ -31,16 +31,22 @@ export class Card {
         cardImage.alt = this.name;
         return this.element;
     }
-    setEventListeners() {
-        const likeBtn = this.element.querySelector(".card__like-button");
+    handleLikeClick(likeBtn) {
         if (this.isLiked) {
             likeBtn.classList.add("card__like-button_is-active");
         }
+        else {
+            likeBtn.classList.remove("card__like-button_is-active");
+        }
+    }
+    setEventListeners() {
+        const likeBtn = this.element.querySelector(".card__like-button");
+        this.handleLikeClick(likeBtn);
         likeBtn.addEventListener("click", async () => {
             try {
                 const cardLike = await api.toggleLike(this.id, this.isLiked);
                 this.isLiked = cardLike.isLiked;
-                likeBtn.classList.toggle("card__like-button_is-active");
+                this.handleLikeClick(likeBtn);
             }
             catch (err) {
                 console.error("Fallo al cambiar estado de like:", err);
