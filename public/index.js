@@ -1,5 +1,5 @@
 import { Card } from "./components/Card.js";
-import { profileInputDescription, profileInputName, newCardBtn, profileEditBtn, defaultFormConfig, api, avatarInputUrl } from "./utils/constants.js";
+import { profileInputDescription, profileInputName, newCardBtn, profileEditBtn, defaultFormConfig, api, avatarInputUrl, } from "./utils/constants.js";
 import { Section } from "./components/Section.js";
 import { PopupWithImage } from "./components/PopupWithImage.js";
 import { PopupWithForm } from "./components/PopupWithForm.js";
@@ -7,17 +7,21 @@ import { UserInfo } from "./components/UserInfo.js";
 import { FormValidator } from "./components/FormValidator.js";
 import { UserAvatar } from "./components/UserAvatar.js";
 import { PopupWithConfirmation } from "./components/PopupWithConfirmation.js";
-const user = new UserInfo({ nameSelector: ".profile__title", jobSelector: ".profile__description" });
+const user = new UserInfo({
+    nameSelector: ".profile__title",
+    jobSelector: ".profile__description",
+});
 const cardList = new Section({
     items: [],
-    renderer: (item) => renderCard(item, cardList)
+    renderer: (item) => renderCard(item, cardList),
 }, ".cards__list");
 const openImagePopup = (cardFormData) => {
     const popupWithImage = new PopupWithImage(cardFormData, "#image-popup");
     popupWithImage.open();
 };
 const openConfirmationPopup = (cardId, cardElement) => {
-    const popupWithConfirmation = new PopupWithConfirmation({ selector: "#confirm-popup",
+    const popupWithConfirmation = new PopupWithConfirmation({
+        selector: "#confirm-popup",
         handleButtonClicked: async () => {
             try {
                 await api.deleteCard(cardId);
@@ -26,14 +30,19 @@ const openConfirmationPopup = (cardId, cardElement) => {
             catch (err) {
                 console.error("Fallo al eliminar tarjeta:", err);
             }
-        }
+        },
     });
     popupWithConfirmation.open();
 };
-const profilePopup = new PopupWithForm({ selector: "#edit-popup", handleFormSubmit: async (formValues) => {
+const profilePopup = new PopupWithForm({
+    selector: "#edit-popup",
+    handleFormSubmit: async (formValues) => {
         try {
             renderSavingState(true, profilePopup.popupButtonElement, "Guardar");
-            const userData = await api.editProfile({ name: formValues.name, job: formValues.description });
+            const userData = await api.editProfile({
+                name: formValues.name,
+                job: formValues.description,
+            });
             user.setUserInfo({ name: userData.name, job: userData.about });
         }
         catch (err) {
@@ -42,13 +51,16 @@ const profilePopup = new PopupWithForm({ selector: "#edit-popup", handleFormSubm
         finally {
             renderSavingState(false, profilePopup.popupButtonElement, "Guardar");
         }
-    } });
-const newCardPopup = new PopupWithForm({ selector: "#new-card-popup", handleFormSubmit: async (formValues) => {
+    },
+});
+const newCardPopup = new PopupWithForm({
+    selector: "#new-card-popup",
+    handleFormSubmit: async (formValues) => {
         try {
             renderSavingState(true, newCardPopup.popupButtonElement, "Crear");
             const cardFormData = {
                 name: formValues["place-name"],
-                link: formValues.link
+                link: formValues.link,
             };
             const newCardData = await api.createCard(cardFormData);
             renderCard(newCardData, cardList);
@@ -59,8 +71,11 @@ const newCardPopup = new PopupWithForm({ selector: "#new-card-popup", handleForm
         finally {
             renderSavingState(false, newCardPopup.popupButtonElement, "Crear");
         }
-    } });
-const newAvatarPopup = new PopupWithForm({ selector: "#avatar-popup", handleFormSubmit: async (formValues) => {
+    },
+});
+const newAvatarPopup = new PopupWithForm({
+    selector: "#avatar-popup",
+    handleFormSubmit: async (formValues) => {
         try {
             renderSavingState(true, newAvatarPopup.popupButtonElement, "Guardar");
             const userData = await api.updateAvatar(formValues.link);
@@ -72,7 +87,8 @@ const newAvatarPopup = new PopupWithForm({ selector: "#avatar-popup", handleForm
         finally {
             renderSavingState(false, newAvatarPopup.popupButtonElement, "Guardar");
         }
-    } });
+    },
+});
 profileEditBtn.addEventListener("click", () => {
     profileFormValidator.resetValidation();
     const userData = user.getUserInfo();
@@ -104,7 +120,7 @@ async function loadInitialData() {
     try {
         const [userData, initialCards] = await Promise.all([
             api.getUserInfo(),
-            api.getInitialCards()
+            api.getInitialCards(),
         ]);
         user.setUserInfo({ name: userData.name, job: userData.about });
         avatar.setAvatarUrl(userData.avatar);

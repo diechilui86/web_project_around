@@ -14,14 +14,14 @@ export class Api {
     async getUserInfo() {
         const res = await fetch(`${this.baseUrl}/users/me`, {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
         });
         return await this.checkResponse(res);
     }
     async getInitialCards() {
         const res = await fetch(`${this.baseUrl}/cards`, {
             method: "GET",
-            headers: this.headers
+            headers: this.headers,
         });
         return await this.checkResponse(res);
     }
@@ -31,8 +31,8 @@ export class Api {
             headers: this.headers,
             body: JSON.stringify({
                 name: userData.name,
-                about: userData.job
-            })
+                about: userData.job,
+            }),
         });
         return await this.checkResponse(res);
     }
@@ -42,7 +42,7 @@ export class Api {
             headers: this.headers,
             body: JSON.stringify({
                 name: newCardData.name,
-                link: newCardData.link
+                link: newCardData.link,
             }),
         });
         return await this.checkResponse(res);
@@ -52,8 +52,8 @@ export class Api {
             method: "PATCH",
             headers: this.headers,
             body: JSON.stringify({
-                avatar: avatarUrl
-            })
+                avatar: avatarUrl,
+            }),
         });
         return await this.checkResponse(res);
     }

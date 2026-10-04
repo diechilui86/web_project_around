@@ -2,7 +2,7 @@ import { Popup } from "./Popup.js";
 
 type FormSubmit = (formValues: FormValues) => void | Promise<void>;
 
-interface FormValues{
+interface FormValues {
   [key: string]: string;
 }
 
@@ -11,15 +11,23 @@ export class PopupWithForm extends Popup {
   private inputsList!: NodeListOf<HTMLInputElement>;
   private handleFormSubmit: FormSubmit;
 
-  constructor({selector, handleFormSubmit}: {selector: string; handleFormSubmit: FormSubmit}) {
+  constructor({
+    selector,
+    handleFormSubmit,
+  }: {
+    selector: string;
+    handleFormSubmit: FormSubmit;
+  }) {
     super(selector);
     this.handleFormSubmit = handleFormSubmit;
     this.generateForm();
   }
 
   private getFormElement(): HTMLFormElement {
-    const formElement = this.popupElement.querySelector(".popup__form") as HTMLFormElement;
-    
+    const formElement = this.popupElement.querySelector(
+      ".popup__form",
+    ) as HTMLFormElement;
+
     return formElement;
   }
 
@@ -44,7 +52,7 @@ export class PopupWithForm extends Popup {
     event.preventDefault();
     await this.handleFormSubmit(this.getInputValues());
     this.close();
-  }
+  };
 
   private getInputValues(): FormValues {
     const formValues: FormValues = {};
@@ -54,12 +62,10 @@ export class PopupWithForm extends Popup {
     });
 
     return formValues;
-
   }
 
   close(): void {
     super.close();
     this.formElement.reset();
-  } 
-
+  }
 }

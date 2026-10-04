@@ -1,4 +1,3 @@
-
 export abstract class Popup {
   protected selector: string;
   protected popupElement: HTMLElement;
@@ -8,11 +7,15 @@ export abstract class Popup {
   constructor(selector: string) {
     this.selector = selector;
     this.popupElement = document.querySelector(this.selector) as HTMLElement;
-    this.closeButton = this.popupElement.querySelector(".popup__close") as HTMLButtonElement;
-    this.popupButtonElement = this.popupElement.querySelector(".popup__button") as HTMLButtonElement;
+    this.closeButton = this.popupElement.querySelector(
+      ".popup__close",
+    ) as HTMLButtonElement;
+    this.popupButtonElement = this.popupElement.querySelector(
+      ".popup__button",
+    ) as HTMLButtonElement;
   }
-  
-  open(): void { 
+
+  open(): void {
     this.popupElement.classList.add("popup_is-opened");
     this.setEventListeners();
   }
@@ -25,17 +28,17 @@ export abstract class Popup {
     if (event.key === "Escape") {
       this.close();
     }
-  }
+  };
 
   private handleCloseClick = (): void => {
-    this.close()
-  }
+    this.close();
+  };
 
   private handleOverlayClick = (event: MouseEvent): void => {
-      if (event.target === this.popupElement) {
-        this.close();
-      }
-  }
+    if (event.target === this.popupElement) {
+      this.close();
+    }
+  };
 
   setEventListeners(): void {
     document.addEventListener("keydown", this.handleEscClose);

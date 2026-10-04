@@ -2,7 +2,7 @@ import { Popup } from "./Popup.js";
 export class PopupWithConfirmation extends Popup {
     buttonElement;
     handleButtonClicked;
-    constructor({ selector, handleButtonClicked }) {
+    constructor({ selector, handleButtonClicked, }) {
         super(selector);
         this.handleButtonClicked = handleButtonClicked;
         this.buttonElement = this.popupElement.querySelector(".popup__button");

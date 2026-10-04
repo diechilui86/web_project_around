@@ -1,14 +1,14 @@
 export class UserInfo {
     nameElement;
     jobElement;
-    constructor({ nameSelector, jobSelector }) {
+    constructor({ nameSelector, jobSelector, }) {
         this.nameElement = document.querySelector(nameSelector);
         this.jobElement = document.querySelector(jobSelector);
     }
     getUserInfo() {
         const userInfo = {
             name: this.nameElement.textContent ?? "",
-            job: this.jobElement.textContent ?? ""
+            job: this.jobElement.textContent ?? "",
         };
         return userInfo;
     }

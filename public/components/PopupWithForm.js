@@ -3,7 +3,7 @@ export class PopupWithForm extends Popup {
     formElement;
     inputsList;
     handleFormSubmit;
-    constructor({ selector, handleFormSubmit }) {
+    constructor({ selector, handleFormSubmit, }) {
         super(selector);
         this.handleFormSubmit = handleFormSubmit;
         this.generateForm();
